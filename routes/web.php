@@ -1,0 +1,77 @@
+<?php
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\Auth\LoginController;
+use App\Http\Controllers\Admin\SubCategoryController;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+
+Route::get('/', function () {
+    return Inertia::render('Home');
+})->name('home');
+
+// Route::group(function(){
+    Route::get('/login',[LoginController::class,'show'])->name('login');
+    Route::post('/login',[LoginController::class,'login']);
+// });
+
+Route::group(['prefix'=> 'admin'], function(){
+
+    Route::get('logout',[LoginController::class,'logout'])->name('logout');
+    Route::get('dashboard',[LoginController::class,'dashboard'])->name('admin.dashboard');
+
+    Route::prefix('category')->controller(CategoryController::class)->name('category.')->group(function() {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/',  'store')->name('store');
+        Route::get('/{id}/edit',  'edit')->name('edit');
+        Route::post('/{id}/update',  'update')->name('update');
+        Route::get('/{id}/delete', 'delete')->name('delete');
+    });
+
+    Route::prefix('subcategory')->group(function() {
+        Route::get('/', [SubCategoryController::class, 'index'])->name('subcategory');
+        Route::get('add', [SubCategoryController::class, 'add'])->name('subcategory.add');
+        Route::post('store', [SubCategoryController::class, 'store'])->name('subcategory.store');
+        Route::get('{id}/edit', [SubCategoryController::class, 'edit'])->name('subcategory.edit');
+        Route::post('{id}/update', [SubCategoryController::class, 'update'])->name('subcategory.update');
+        Route::get('delete/{id}', [SubCategoryController::class, 'delete'])->name('subcategory.delete');
+        Route::get('/ajax/{category_id}', [SubCategoryController::class, 'getSubCategory']);
+    });
+
+    Route::prefix('brand')->group(function() {
+        Route::get('/', [BrandController::class, 'index'])->name('brand');
+        Route::get('add', [BrandController::class, 'add'])->name('brand.add');
+        Route::post('store', [BrandController::class, 'store'])->name('brand.store');
+        Route::get('{id}/edit', [BrandController::class, 'edit'])->name('brand.edit');
+        Route::post('{id}/update', [BrandController::class, 'update'])->name('brand.update');
+        Route::get('{id}/delete', [BrandController::class, 'delete'])->name('brand.delete');
+    });
+
+    Route::prefix('product')->group(function() {
+        Route::get('/',[ProductController::class,'index'])->name('product');
+        Route::get('add',[ProductController::class,'add'])->name('product.add');
+        Route::post('store',[ProductController::class,'store'])->name('product.store');
+        Route::get('{id}/edit', [ProductController::class, 'edit'])->name('product.edit');
+        Route::post('{id}/update', [ProductController::class, 'update'])->name('product.update');
+        Route::get('show/{product}', [ProductController::class, 'show'])->name('product.show');
+        Route::post('multiImage/update', [ProductController::class, 'multiImageUpdate'])->name('product.multiImage.update');
+        Route::get('delete/multiImage/{id}', [ProductController::class, 'multiImageDelete'])->name('product.multiImage.delete');
+        //  Product Inactive route --------------------------------------------------------------------
+        Route::get('{id}/inactive', [ProductController::class, 'productInactive'])->name('product.inactive');
+        Route::get('inactive',[ProductController::class,'productAllInactive'])->name('all.inactive.product');
+    });
+
+    Route::get('orders', [OrderController::class, 'index'])->name('order');
+    Route::get('order/{order}/show', [OrderController::class, 'show'])->name('order.details');
+    Route::get('orders/{order}/invoice', [OrderController::class, 'invoice'])->name('order.invoice');
+
+    Route::get('users', [UserController::class, 'index'])->name('user');
+    Route::get('user/inactive/{id}', [UserController::class, 'inactive'])->name('user.inactive');
+    Route::get('inactive/user',[UserController::class,'allInactive'])->name('all.inactive.user');
+    Route::get('user/active/{id}', [UserController::class, 'active'])->name('user.active');
+});
+
