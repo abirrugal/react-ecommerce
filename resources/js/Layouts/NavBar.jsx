@@ -10,14 +10,13 @@ return (
     <nav className="navbar-classic navbar navbar-expand-lg">
         <a id="nav-toggle" href="#" onClick={onToggleSidebar}><i
             data-feather="menu"
-            className="nav-icon me-2 icon-xs"></i>++</a>
+            className="nav-icon me-2 icon-xs"></i><i class="fa fa-bars" aria-hidden="true"></i></a>
 
-        <div className="ms-lg-3 d-none d-md-none d-lg-block">
-            {/* <!-- Form --> */}
+        {/* <div className="ms-lg-3 d-none d-md-none d-lg-block">
             <form className="d-flex align-items-center">
                 <input type="search" className="form-control" placeholder="Search" />
             </form>
-        </div>
+        </div> */}
         {/* <!--Navbar nav --> */}
         <ul className="navbar-nav navbar-right-wrap ms-auto d-flex nav-top-wrap">
             <li className="dropdown stopevent">

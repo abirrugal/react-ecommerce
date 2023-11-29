@@ -28,8 +28,8 @@ Route::group(['prefix'=> 'admin'], function(){
         Route::get('/create', 'create')->name('create');
         Route::post('/',  'store')->name('store');
         Route::get('/{id}/edit',  'edit')->name('edit');
-        Route::post('/{id}/update',  'update')->name('update');
-        Route::get('/{id}/delete', 'delete')->name('delete');
+        Route::put('/{id}',  'update')->name('update');
+        Route::delete('/{id}', 'delete')->name('delete');
     });
 
     Route::prefix('subcategory')->group(function() {

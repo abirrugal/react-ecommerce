@@ -2,6 +2,7 @@ import React from 'react';
 import Front from './../../Layouts/Front'
 import { InertiaLink } from '@inertiajs/inertia-react';
 import Pagination from './../../Includes/Pagination'
+import Search from './../../Includes/Search'
 
 function Index( data ) {
     const { categories } = data;
@@ -9,10 +10,11 @@ function Index( data ) {
     return (
         <Front title="Category List">
             <div className="card my-3">
-                <div className="card-header d-flex justify-content-between">
-                    <h4>Categorys</h4>
+                <div className="card-header d-flex justify-content-between align-items-center">
+                    <h4>Categories</h4>
                     <div>
-                        <InertiaLink href={base_url + '/admin/category/create'} className="btn btn-primary">Add Category</InertiaLink>
+                        <Search url ={base_url+'/admin/category'}/>
+                        <InertiaLink  href={base_url + '/admin/category/create'} className="btn btn-primary mt-2">Add Category</InertiaLink>
                     </div>
                 </div>
                 <div className="card-body p-0">
@@ -32,13 +34,13 @@ function Index( data ) {
                                     <td>{name}</td>
                                     <td>{description}</td>
                                     <td>
-                                        <img src={base_url+image} />
+                                        <img src={base_url+'/'+image} height="100px" width="100px" />
                                     </td>
                                     <td>{status == 1 ? 'Active':'Inactive'}</td>
                                     <td>
-                                        <button className="btn btn-info text-white btn-sm mr-2">
+                                       <InertiaLink href={base_url+'/admin/category/'+id+'/edit'}><button className="btn btn-info text-white btn-sm mr-2">
                                             Edit
-                                        </button>
+                                        </button></InertiaLink>
                                         <button className="btn btn-danger btn-sm">
                                             Delete
                                         </button>
