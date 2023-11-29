@@ -19,7 +19,7 @@ class LoginController extends Controller
 
     public function dashboard()
     {
-        return view('dashboard');
+        return to_route('home');
     }
 
     public function login(Request $request)

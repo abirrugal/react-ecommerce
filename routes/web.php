@@ -32,15 +32,15 @@ Route::group(['prefix'=> 'admin'], function(){
         Route::delete('/{id}', 'delete')->name('delete');
     });
 
-    Route::prefix('subcategory')->group(function() {
-        Route::get('/', [SubCategoryController::class, 'index'])->name('subcategory');
-        Route::get('add', [SubCategoryController::class, 'add'])->name('subcategory.add');
-        Route::post('store', [SubCategoryController::class, 'store'])->name('subcategory.store');
-        Route::get('{id}/edit', [SubCategoryController::class, 'edit'])->name('subcategory.edit');
-        Route::post('{id}/update', [SubCategoryController::class, 'update'])->name('subcategory.update');
-        Route::get('delete/{id}', [SubCategoryController::class, 'delete'])->name('subcategory.delete');
-        Route::get('/ajax/{category_id}', [SubCategoryController::class, 'getSubCategory']);
+    Route::prefix('subcategory')->controller(SubCategoryController::class)->name('subcategory.')->group(function() {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/',  'store')->name('store');
+        Route::get('/{id}/edit',  'edit')->name('edit');
+        Route::put('/{id}',  'update')->name('update');
+        Route::delete('/{id}', 'delete')->name('delete');
     });
+
 
     Route::prefix('brand')->group(function() {
         Route::get('/', [BrandController::class, 'index'])->name('brand');

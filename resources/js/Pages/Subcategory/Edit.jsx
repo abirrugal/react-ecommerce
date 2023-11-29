@@ -2,42 +2,36 @@ import React, { useRef, useState } from 'react';
 import Front from '../../Layouts/Front';
 import { Inertia } from '@inertiajs/inertia';
 
-
-const Edit = (editValue) => {
-    const { category } = editValue;
+const Create = (data) => {
+    const {categories, subcategory} = data;
 
     const imageRef = useRef('');
     const [values, setValues] = useState({
-        name: category.name,
-        description: category.description,
-        _method: 'PUT'
+        name: subcategory.name,
+        category_id: subcategory.category_id,
+        _method:'PUT'
     });
 
     function handleChange(e) {
-        console.log('Clicked');
         setValues({ ...values, [e.target.name]: e.target.value })
     }
 
     function handleSubmit(e) {
         e.preventDefault()
         values.image = imageRef.current.files[0];
-        values._method = 'PUT';
-
         const updatedValues = {
             ...values,
-            image: imageRef.current.files[0],
-            _method: 'PUT',
-        };
-
+            image : imageRef.current.files[0]
+        }
         setValues(updatedValues);
-        Inertia.post(base_url + '/admin/category/' + category.id, updatedValues)
+        Inertia.post(base_url + '/admin/subcategory/'+subcategory.id, updatedValues)
     }
 
     return (
         <Front title="Create Category">
             <div className="card col-md-8 col-lg-6 my-3">
                 <div className="card-header">
-                    <h4>Edit Category</h4>
+                    <h4>Add Sub Category</h4>
                 </div>
                 <div className="card-body">
                     <form id="basic-form" onSubmit={handleSubmit}>
@@ -48,10 +42,15 @@ const Edit = (editValue) => {
                             </div>
                         </div>
 
-                        <div className="mb-3">
-                            <label htmlFor="description" className="col-form-label">Description</label>
-                            <div className="form-group">
-                                <textarea className="form-control" name="description" onChange={handleChange} value={values.description} placeholder="Description here" id="description" ></textarea>
+                        <div class="mb-3">
+                            <label for="name" class="col-form-label">Select Category :</label>
+                            <div class="form-group">
+                                <select name="category_id" class="form-select mb-3" aria-label="Default select example" onChange={handleChange}>
+                                    {categories.map(({id, name})=>{
+                                        return(<option value={id} selected={id == values.category_id ? 'selected':''} >{name}</option>)
+                                    })}
+                                                  
+                                </select>
                             </div>
                         </div>
 
@@ -63,12 +62,12 @@ const Edit = (editValue) => {
                             <div className="row mb-3">
                                 <div className="col-sm-3">
                                     <h6 className="mb-0"></h6>
-                                    <img src={base_url + '/' + category.image}
+                                    <img src={base_url + '/' + subcategory.image}
                                         alt="Admin" id="showImage" />
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" className="btn btn-primary px-4">Update Category</button>
+                        <button type="submit" className="btn btn-primary px-4">Add Sub Category</button>
                     </form>
                 </div>
             </div>
@@ -76,4 +75,4 @@ const Edit = (editValue) => {
     )
 }
 
-export default Edit
+export default Create

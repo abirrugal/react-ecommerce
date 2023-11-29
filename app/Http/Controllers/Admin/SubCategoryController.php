@@ -6,128 +6,111 @@ use App\Http\Controllers\Controller;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use Inertia\Inertia;
 
 class SubCategoryController extends Controller
 {
-    public function index(){
+    public function index(Request $request)
+    {
 
-        $subcategories = SubCategory::latest()->paginate(15);
+        $subcategories = SubCategory::query();
 
-        return view('admin.subcategory.index',compact('subcategories'));
+        if ($request->search) {
+            $subcategories = $subcategories->where('name', 'LIKE', "%{$request->search}%");
+        }
+        $subcategories = $subcategories->latest()->paginate(15);
+
+        return Inertia::render('Subcategory/Index', ['subcategories' => $subcategories]);
     }
 
-    public function add(){
+    public function create()
+    {
 
-        $categories = Category::orderBy('name','ASC')->get();
+        $categories = Category::orderBy('name', 'ASC')->get();
 
-        return view('admin.subcategory.create',compact('categories'));
+        return Inertia::render('Subcategory/Create', ['categories' => $categories]);
     }
 
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
+
+        $request->validate([
+            'name' => 'required|string',
+            'category_id' => 'required|numeric|exists:categories,id',
+            'image' => 'required|image|mimes:png,jpg,jpeg',
+        ]);
 
         $image = $request->file('image');
-        $name_gen = time().'.'.$image->getClientOriginalExtension();
-        $save_url = 'images/subcategory/'.$name_gen;
+        $name_gen = time() . '.' . $image->getClientOriginalExtension();
+        $save_url = 'images/subcategory/' . $name_gen;
         $image->move(public_path('images/subcategory'), $name_gen);
 
         SubCategory::insert([
             'category_id' => $request->category_id,
             'name' => $request->name,
-            'slug' => strtolower(str_replace(' ', '-',$request->name)),
+            'slug' => strtolower(str_replace(' ', '-', $request->name)),
             'image' => $save_url,
         ]);
 
-        $notification = array(
-            'message' => 'Sub Category Add Successfully',
-            'alert-type' => 'success'
-        );
-
-        return redirect()->route('subcategory')->with($notification);
+        return redirect()->route('subcategory.index');
     }
 
 
-    public function edit($id){
+    public function edit($id)
+    {
 
-        $categories = Category::orderBy('name','ASC')->get();
+        $categories = Category::orderBy('name', 'ASC')->get();
         $subcategory = SubCategory::findOrFail($id);
 
-        return view('admin.subcategory.edit',compact('subcategory','categories'));
+        return Inertia::render('Subcategory/Edit', ['categories' => $categories, 'subcategory' => $subcategory]);
     }
 
 
-    public function update(Request $request){
+    public function update(Request $request, $id)
+    {
+        $inputs = $request->validate([
+            'name' => 'required|min:2',
+            'category_id' => 'required|numeric|exists:categories,id',
+            'image' => 'nullable|mimes:png,jpg,jpeg'
+        ]);
 
-        $cat_id = $request->id;
-        $old_img = $request->old_image;
+        $subCategory = SubCategory::find($id);
 
-        if ($request->file('image')) {
-
+        if ($request->file('image') && $request->file('image')->isValid()) {
+            if ($subCategory && file_exists($subCategory->image)) {
+                unlink($subCategory->image);
+            }
             $image = $request->file('image');
-            $name_gen = time().'.'.$image->getClientOriginalExtension();
-            $save_url = 'images/subcategory/'.$name_gen;
-            $image->move(public_path('images/subcategory'), $name_gen);
-
-        if (file_exists($old_img)) {
-           unlink($old_img);
+            $name_gen = time() . '.' . $image->getClientOriginalExtension();
+            $save_url = 'images/subcategories/' . $name_gen;
+            $image->move(public_path('images/subcategories'), $name_gen);
+            $inputs['image'] = $save_url;
         }
+        $subCategory->update($inputs);
 
-        SubCategory::findOrFail($cat_id)->update([
-
-            'category_id' => $request->category_id,
-            'name' => $request->name,
-            'slug' => strtolower(str_replace(' ', '-',$request->name)),
-            'image' => $save_url,
-        ]);
-
-        $notification = array(
-            'message' => 'Sub Category Update Successfully',
-            'alert-type' => 'success'
-        );
-
-        return redirect()->route('subcategory')->with($notification);
-
-        } else {
-
-             Category::findOrFail($cat_id)->update([
-                'category_id' => $request->category_id,
-                'name' => $request->name,
-                'slug' => strtolower(str_replace(' ', '-',$request->name)),
-        ]);
-
-            $notification = array(
-                'message' => 'Sub Category Update Successfully',
-                'alert-type' => 'success'
-            );
-
-            return redirect()->route('subcategory')->with($notification);
-
-        }
+        return to_route('subcategory.index');
     }
 
+    public function delete($id)
+    {
 
-    public function delete($id){
+        $Subcategory = SubCategory::findOrFail($id);
 
-        $category = SubCategory::findOrFail($id);
-        $img = $category->image;
-        unlink($img );
+        if (file_exists($Subcategory->image)) {
+            unlink($Subcategory->image);
+        }
+        $Subcategory->delete();
 
-        SubCategory::findOrFail($id)->delete();
-
-        $notification = array(
-            'message' => 'Sub Category Delete Successfully',
-            'alert-type' => 'success'
-        );
-
-        return redirect()->back()->with($notification);
+        return redirect()->route('subcategory.index');
     }
 
 
     // Category to Subcategory Lode in Javascript Ajax --------------------------------------------------
 
-    public function getSubCategory($category_id){
-        $subCat = SubCategory::where('category_id',$category_id)->orderBy('name','ASC')->get();
-            return json_encode($subCat);
-
+    public function getSubCategory($category_id)
+    {
+        $subCat = SubCategory::where('category_id', $category_id)->orderBy('name', 'ASC')->get();
+        return json_encode($subCat);
     }
 }

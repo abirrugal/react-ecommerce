@@ -34,6 +34,11 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string',
+            'image' => 'required|image|mimes:png,jpg,jpeg',
+            'description' => 'required|min:2',
+        ]);
 
         $image = $request->file('image');
         $name_gen = time() . '.' . $image->getClientOriginalExtension();
@@ -69,7 +74,7 @@ class CategoryController extends Controller
     {
         $inputs = $request->validate([
             'name' => 'required|min:2',
-            'description' => 'required|min:5',
+            'description' => 'required|min:2',
             'image' => 'nullable|mimes:png,jpg,jpeg'
         ]);
 
@@ -86,7 +91,7 @@ class CategoryController extends Controller
             $inputs['image'] = $save_url;
         }
 
-        Category::findOrFail($id)->update($inputs);
+        $category->update($inputs);
 
         return to_route('category.index');
     }
@@ -94,17 +99,13 @@ class CategoryController extends Controller
 
     public function delete($id)
     {
-
         $category = Category::findOrFail($id);
-        $img = $category->image;
-        unlink($img);
 
-        Category::findOrFail($id)->delete();
-        $notification = array(
-            'message' => 'Category Delete Successfully',
-            'alert-type' => 'success'
-        );
+        if (file_exists($category->image)) {
+            unlink($category->image);
+        }
+        $category->delete();
 
-        return redirect()->route('category')->with($notification);
+        return redirect()->route('category.index');
     }
 }
