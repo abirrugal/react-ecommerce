@@ -4,7 +4,6 @@ import { Inertia } from '@inertiajs/inertia';
 
 const Create = (data) => {
     const {categories} = data;
-
     const imageRef = useRef('');
     const [values, setValues] = useState({
         name: '',
@@ -41,10 +40,10 @@ const Create = (data) => {
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="name" class="col-form-label">Select Category :</label>
-                            <div class="form-group">
-                                <select name="category_id" class="form-select mb-3" aria-label="Default select example" onChange={handleChange}>
+                        <div className="mb-3">
+                            <label for="name" className="col-form-label">Select Category :</label>
+                            <div className="form-group">
+                                <select name="category_id" className="form-select mb-3" aria-label="Default select example" onChange={handleChange}>
                                     {categories.map(({id, name})=>{
                                         return(<option value={id}>{name}</option>)
                                     })}

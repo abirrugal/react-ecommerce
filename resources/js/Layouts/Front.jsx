@@ -18,7 +18,7 @@ const Front = ({ title, children }) => {
                 <Sidebar />
                 <div id="page-content">
                     <NavBar onToggleSidebar={toggleSidebar} />
-                    <div class="container-fluid">
+                    <div className="container-fluid">
                         {children}
                     </div>
                 </div>

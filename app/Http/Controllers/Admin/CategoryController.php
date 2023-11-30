@@ -26,15 +26,13 @@ class CategoryController extends Controller
 
     public function create()
     {
-
-        // return view('admin.category.create');
         return Inertia::render('Category/Create');
     }
 
 
     public function store(Request $request)
     {
-        $request->validate([
+        $input =  $request->validate([
             'name' => 'required|string',
             'image' => 'required|image|mimes:png,jpg,jpeg',
             'description' => 'required|min:2',
@@ -45,17 +43,7 @@ class CategoryController extends Controller
         $save_url = 'images/categories/' . $name_gen;
         $image->move(public_path('images/categories'), $name_gen);
 
-        Category::insert([
-            'name' => $request->name,
-            'slug' => strtolower(str_replace(' ', '-', $request->name)),
-            'description' => $request->description,
-            'image' => $save_url,
-        ]);
-
-        // $notification = array(
-        //     'message' => 'Category Add Successfully',
-        //     'alert-type' => 'success'
-        // );
+        Category::create($input);
 
         return to_route('category.index');
     }

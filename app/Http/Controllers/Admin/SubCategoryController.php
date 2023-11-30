@@ -53,7 +53,7 @@ class SubCategoryController extends Controller
             'image' => $save_url,
         ]);
 
-        return redirect()->route('subcategory.index');
+        return to_route('subcategory.index');
     }
 
 

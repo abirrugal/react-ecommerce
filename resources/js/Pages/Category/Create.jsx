@@ -1,9 +1,11 @@
 import React, { useRef, useState } from 'react';
 import Front from '../../Layouts/Front';
 import { Inertia } from '@inertiajs/inertia';
+import { usePage } from '@inertiajs/inertia-react'
 
 
-const Create = (data) => {
+const Create = ({errors}) => {
+    console.log(errors);
     const imageRef = useRef('');
     const [values, setValues] = useState({
         name : '',

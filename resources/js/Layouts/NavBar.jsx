@@ -10,7 +10,7 @@ return (
     <nav className="navbar-classic navbar navbar-expand-lg">
         <a id="nav-toggle" href="#" onClick={onToggleSidebar}><i
             data-feather="menu"
-            className="nav-icon me-2 icon-xs"></i><i class="fa fa-bars" aria-hidden="true"></i></a>
+            className="nav-icon me-2 icon-xs"></i><i className="fa fa-bars" aria-hidden="true"></i></a>
 
         {/* <div className="ms-lg-3 d-none d-md-none d-lg-block">
             <form className="d-flex align-items-center">
@@ -90,7 +90,7 @@ return (
                 <a className="rounded-circle" href="#" role="button" id="dropdownUser"
                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <div className="avatar avatar-md avatar-indicators avatar-online">
-                        <img alt="avatar" src="./assets/images/avatar/avatar-1.jpg"
+                        <img alt="avatar" src={base_url+"/theme/dashboard/assets/images/avatar/avatar-1.jpg"}
                             className="rounded-circle" />
                     </div>
                 </a>
