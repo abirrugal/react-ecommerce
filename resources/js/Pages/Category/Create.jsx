@@ -1,27 +1,34 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import Front from '../../Layouts/Front';
-import { router } from '@inertiajs/react';
+import { useForm } from '@inertiajs/react';
 
+const Create = () => {
 
-const Create = ({errors}) => {
-    console.log(errors);
-    const imageRef = useRef('');
-    const [values, setValues] = useState({
-        name : '',
-        description : '',
+    const { data, setData, post, processing, errors } = useForm({
+        name: '',
+        description: '',
+        image: '', // Additional image field
     });
 
-    function handleChange(e){
-        setValues({ ...values, [e.target.name]: e.target.value })
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        // Prepare form data
+        const formData = {
+            ...data,
+            // Include the image data if it's selected
+            ...(data.image && { image: data.image }),
+        };
+
+        post(base_url + '/admin/category', formData);
+    };
+
+    // Function to handle image selection
+    function handleImageChange(e) {
+        const selectedImage = e.target.files[0];
+        setData('image', selectedImage);
     }
 
-    function handleSubmit(e) {
-        e.preventDefault()
-        values.image = imageRef.current.files[0];
-        // console.log(values);
-        router.post(base_url + '/admin/category', values)
-    }
-    
     return (
         <Front title="Create Category">
             <div className="card col-md-8 col-lg-6 my-3">
@@ -33,21 +40,22 @@ const Create = ({errors}) => {
                         <div className="mb-3">
                             <label htmlFor="name" className="col-form-label">Name</label>
                             <div className="form-group">
-                                <input type="text" id="name" name="name" onChange={handleChange} value={values.name} className="form-control" placeholder="Name" />
+                                <input type="text" id="name" name="name" onChange={e => setData('name', e.target.value)} value={data.name} className="form-control" placeholder="Name" />
                             </div>
+                            {errors.name && <div className='alert alert-danger'>{errors.name}</div>}
                         </div>
 
                         <div className="mb-3">
                             <label htmlFor="description" className="col-form-label">Description</label>
                             <div className="form-group">
-                                <textarea className="form-control" name="description" onChange={handleChange} value={values.description} placeholder="Description here" id="description" ></textarea>
+                                <textarea className="form-control" name="description" onChange={e => setData('description', e.target.value)} value={data.description} placeholder="Description here" id="description" ></textarea>
                             </div>
                         </div>
 
                         <div className="mb-3">
                             <label htmlFor="image" className="col-form-label">Image</label>
                             <div className="form-group">
-                                <input type="file" ref={imageRef} name="image" className="form-control" placeholder="Product image " id="image" />
+                                <input type="file" onChange={handleImageChange} name="image" className="form-control" placeholder="Product image " id="image" />
                             </div>
                             <div className="row mb-3">
                                 <div className="col-sm-3">
@@ -62,7 +70,7 @@ const Create = ({errors}) => {
                 </div>
             </div>
         </Front>
-    )
-}
+    );
+};
 
-export default Create
+export default Create;

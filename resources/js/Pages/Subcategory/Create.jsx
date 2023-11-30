@@ -1,29 +1,44 @@
 import React, { useRef, useState } from 'react';
 import Front from '../../Layouts/Front';
-// import { router } from '@inertiajs/inertia';
+import { useForm } from '@inertiajs/react';
 import { router } from '@inertiajs/react'
 
-const Create = (data) => {
-    const {categories} = data;
-    const imageRef = useRef('');
-    const [values, setValues] = useState({
-        name: '',
-        category_id: categories.length > 0 ? categories[0].id : '',
+const Create = (props) => {
+    const {categories} = props;
+    // const imageRef = useRef('');
+    // const [values, setValues] = useState({
+    //     name: '',
+    //     category_id: categories.length > 0 ? categories[0].id : '',
+    // });
+
+    // function handleChange(e) {
+    //     setValues({ ...values, [e.target.name]: e.target.value })
+    // }
+
+    const {data,setData,errors,post} = useForm({
+        category_id : categories.length > 0 ? categories[0].id : '',
+        name : ''
     });
 
-    function handleChange(e) {
-        setValues({ ...values, [e.target.name]: e.target.value })
+    function handleImage(e){
+        setData('image', e.target.files[0]);
     }
 
     function handleSubmit(e) {
         e.preventDefault()
-        values.image = imageRef.current.files[0];
-        const updatedValues = {
-            ...values,
-            image : imageRef.current.files[0]
+        // values.image = imageRef.current.files[0];
+        // const updatedValues = {
+        //     ...values,
+        //     image : imageRef.current.files[0]
+        // }
+        // setValues(updatedValues);
+        // router.post(base_url + '/admin/subcategory', updatedValues)
+
+        const formData = {
+            ...data,
+            ...(data.image && {image:data.image} )
         }
-        setValues(updatedValues);
-        router.post(base_url + '/admin/subcategory', updatedValues)
+        post(base_url + '/admin/subcategory', formData);
     }
 
     return (
@@ -37,14 +52,14 @@ const Create = (data) => {
                         <div className="mb-3">
                             <label htmlFor="name" className="col-form-label">Name</label>
                             <div className="form-group">
-                                <input type="text" id="name" name="name" onChange={handleChange} value={values.name} className="form-control" placeholder="Name" />
+                                <input type="text" id="name" name="name" onChange={e=> setData('name', e.target.value)} value={data.name} className="form-control" placeholder="Name" />
                             </div>
                         </div>
 
                         <div className="mb-3">
                             <label for="name" className="col-form-label">Select Category :</label>
                             <div className="form-group">
-                                <select name="category_id" className="form-select mb-3" aria-label="Default select example" onChange={handleChange}>
+                                <select name="category_id" className="form-select mb-3" value={data.category_id} aria-label="Default select example" onChange={e=>setData('category_id', e.target.value)}>
                                     {categories.map(({id, name})=>{
                                         return(<option value={id}>{name}</option>)
                                     })}
@@ -56,7 +71,7 @@ const Create = (data) => {
                         <div className="mb-3">
                             <label htmlFor="image" className="col-form-label">Image</label>
                             <div className="form-group">
-                                <input type="file" ref={imageRef} name="image" className="form-control" placeholder="Product image " id="image" />
+                                <input type="file" onChange={handleImage} name="image" className="form-control" placeholder="Product image " id="image" />
                             </div>
                             <div className="row mb-3">
                                 <div className="col-sm-3">

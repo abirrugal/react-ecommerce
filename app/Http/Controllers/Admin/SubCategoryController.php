@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
 class SubCategoryController extends Controller
@@ -34,24 +35,26 @@ class SubCategoryController extends Controller
 
     public function store(Request $request)
     {
-
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string',
-            'category_id' => 'required|numeric|exists:categories,id',
             'image' => 'required|image|mimes:png,jpg,jpeg',
+            'category_id' => 'required|numeric|exists:categories,id'
         ]);
+
+        $input = $validator->validated();
+
+        if ($validator->fails()) {
+            return Inertia::render('Subcategory/Create', ['errors' => $validator->errors()->toArray()]);
+        }
 
         $image = $request->file('image');
         $name_gen = time() . '.' . $image->getClientOriginalExtension();
         $save_url = 'images/subcategory/' . $name_gen;
         $image->move(public_path('images/subcategory'), $name_gen);
+        $input['image'] = $save_url;
+        $input['slug'] = strtolower(str_replace(' ', '-', $request->name));
 
-        SubCategory::insert([
-            'category_id' => $request->category_id,
-            'name' => $request->name,
-            'slug' => strtolower(str_replace(' ', '-', $request->name)),
-            'image' => $save_url,
-        ]);
+        SubCategory::create($input);
 
         return to_route('subcategory.index');
     }

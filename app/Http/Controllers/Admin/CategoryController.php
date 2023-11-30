@@ -5,38 +5,41 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
 class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-
         $categories = Category::query();
 
         if ($request->search) {
             $categories = $categories->where('name', 'LIKE', "%{$request->search}%");
         }
-
         $categories = $categories->latest()->paginate(8);
 
         return Inertia::render('Category/Index', ['categories' => $categories]);
     }
-
 
     public function create()
     {
         return Inertia::render('Category/Create');
     }
 
-
     public function store(Request $request)
     {
-        $input =  $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'image' => 'required|image|mimes:png,jpg,jpeg',
             'description' => 'required|min:2',
         ]);
+
+        $input = $validator->validated();
+
+        if ($validator->fails()) {
+            return Inertia::render('Category/Create', ['errors' => $validator->errors()->toArray()]);
+        }
 
         $image = $request->file('image');
         $name_gen = time() . '.' . $image->getClientOriginalExtension();
