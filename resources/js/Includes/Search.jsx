@@ -1,4 +1,4 @@
-import { Inertia } from '@inertiajs/inertia';
+import { router } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 
 const Search = ({ url }) => {
@@ -10,7 +10,7 @@ const Search = ({ url }) => {
 
     if (searchValue) {
       setSearch(searchValue);
-      Inertia.get(url, {
+      router.get(url, {
         search: searchValue,
       });
     }
@@ -23,7 +23,7 @@ const Search = ({ url }) => {
     // Save search query to localStorage
     localStorage.setItem('searchQuery', searchValue);
 
-    Inertia.get(url, {
+    router.get(url, {
       search: searchValue,
     }, {
       replace: true,

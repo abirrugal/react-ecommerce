@@ -1,16 +1,16 @@
 import React from 'react';
 import Front from '../../Layouts/Front'
-import { InertiaLink } from '@inertiajs/inertia-react';
+import { Link } from '@inertiajs/react'
 import Pagination from '../../Includes/Pagination'
 import Search from '../../Includes/Search'
-import { Inertia } from '@inertiajs/inertia';
+import { router } from '@inertiajs/react'
 
 function Index(data) {
     const { subcategories } = data;
     function deleteItem(id) {
         var result = confirm("Want to delete?");
         if (result)
-            Inertia.post(base_url + '/admin/subcategory/' + id, { "_method": "DELETE" });
+            router.post(base_url + '/admin/subcategory/' + id, { "_method": "DELETE" });
     }
 
     return (
@@ -20,7 +20,7 @@ function Index(data) {
                     <h4>Sub Categories</h4>
                     <div>
                         <Search url={base_url + '/admin/subcategory'} />
-                        <InertiaLink href={base_url + '/admin/subcategory/create'} className="btn btn-primary mt-2">Add Subcategory</InertiaLink>
+                        <Link href={base_url + '/admin/subcategory/create'} className="btn btn-primary mt-2">Add Subcategory</Link>
                     </div>
                 </div>
                 <div className="card-body p-0">
@@ -42,9 +42,9 @@ function Index(data) {
                                     </td>
                                     <td>{status == 1 ? 'Active' : 'Inactive'}</td>
                                     <td>
-                                        <InertiaLink href={base_url + '/admin/subcategory/' + id + '/edit'}><button className="btn btn-info text-white btn-sm mr-2">
+                                        <Link href={base_url + '/admin/subcategory/' + id + '/edit'}><button className="btn btn-info text-white btn-sm mr-2">
                                             Edit
-                                        </button></InertiaLink>
+                                        </button></Link>
                                         <button className="btn btn-danger btn-sm" onClick={() => deleteItem(id)}>
                                             Delete
                                         </button>

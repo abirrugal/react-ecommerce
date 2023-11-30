@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import Front from "../Layouts/Front";
-import { Inertia } from "@inertiajs/inertia";
+import { router } from '@inertiajs/react'
 
 const Create = ({user}) => {
 
@@ -19,7 +19,7 @@ const Create = ({user}) => {
         e.preventDefault()
         values._method = 'PUT';
         values.image = myRef.current.files[0];
-        Inertia.post(base_url + '/users/' +user.id, values)
+        router.post(base_url + '/users/' +user.id, values)
     }
     return (
         <Front title="Create User">

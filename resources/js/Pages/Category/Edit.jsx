@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import Front from '../../Layouts/Front';
-import { Inertia } from '@inertiajs/inertia';
+import { router } from '@inertiajs/react'
 
 
 const Edit = (editValue) => {
@@ -30,7 +30,7 @@ const Edit = (editValue) => {
         };
 
         setValues(updatedValues);
-        Inertia.post(base_url + '/admin/category/' + category.id, updatedValues)
+        router.post(base_url + '/admin/category/' + category.id, updatedValues)
     }
 
     return (

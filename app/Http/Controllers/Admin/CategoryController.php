@@ -42,6 +42,8 @@ class CategoryController extends Controller
         $name_gen = time() . '.' . $image->getClientOriginalExtension();
         $save_url = 'images/categories/' . $name_gen;
         $image->move(public_path('images/categories'), $name_gen);
+        $input['image'] = $save_url;
+        $input['slug'] = strtolower(str_replace(' ', '-', $request->name));
 
         Category::create($input);
 

@@ -1,16 +1,15 @@
 import Front from '../Layouts/Front';
-import { Inertia } from '@inertiajs/inertia';
-import { InertiaLink } from '@inertiajs/inertia-react';
+import { router } from '@inertiajs/react'
+import { Link } from '@inertiajs/react'
 import Search from '../Includes/Search';
 import Pagination from '../Includes/Pagination';
-import { Head, usePage, Link } from '@inertiajs/inertia-react';
 
 const Users = ( props ) => {
     const { users } = props;
     function deleteItem(param) {
         var result = confirm("Want to delete?");
         if (result) {
-            Inertia.post(base_url + '/users/' + param, { "_method": "DELETE" })
+            router.post(base_url + '/users/' + param, { "_method": "DELETE" })
         }
     }
 
@@ -39,7 +38,7 @@ const Users = ( props ) => {
                                 <td>{name}</td>
                                 <td>{email}</td>
                                 <td>
-                                    <InertiaLink className='text-white' href={base_url + '/users/' + id + '/edit'}><button className='btn btn-info mr-2'> Edit </button></InertiaLink>
+                                    <Link className='text-white' href={base_url + '/users/' + id + '/edit'}><button className='btn btn-info mr-2'> Edit </button></Link>
                                     <button className='btn btn-danger' onClick={() => deleteItem(id)}>Delete</button>
                                 </td>
                             </tr>

@@ -1,6 +1,7 @@
 import React from 'react'
 import {createRoot} from 'react-dom/client' //here
-import {createInertiaApp } from '@inertiajs/inertia-react'
+// import {createInertiaApp } from '@inertiajs/inertia-react'
+import { createInertiaApp } from '@inertiajs/react'
 import {resolvePageComponent} from 'laravel-vite-plugin/inertia-helpers'
 
 createInertiaApp({

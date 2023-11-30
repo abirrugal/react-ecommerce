@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 import Front from '../../Layouts/Front';
-import { Inertia } from '@inertiajs/inertia';
-import { usePage } from '@inertiajs/inertia-react'
+import { router } from '@inertiajs/react';
 
 
 const Create = ({errors}) => {
@@ -20,7 +19,7 @@ const Create = ({errors}) => {
         e.preventDefault()
         values.image = imageRef.current.files[0];
         // console.log(values);
-        Inertia.post(base_url + '/admin/category', values)
+        router.post(base_url + '/admin/category', values)
     }
     
     return (

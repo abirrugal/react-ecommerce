@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import Front from '../../Layouts/Front';
-import { Inertia } from '@inertiajs/inertia';
+import { router } from '@inertiajs/react'
 
 const Create = (data) => {
     const {categories, subcategory} = data;
@@ -24,7 +24,7 @@ const Create = (data) => {
             image : imageRef.current.files[0]
         }
         setValues(updatedValues);
-        Inertia.post(base_url + '/admin/subcategory/'+subcategory.id, updatedValues)
+        router.post(base_url + '/admin/subcategory/'+subcategory.id, updatedValues)
     }
 
     return (

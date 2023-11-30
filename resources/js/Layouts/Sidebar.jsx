@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { InertiaLink } from '@inertiajs/inertia-react';
+// import { Link } from '@inertiajs/inertia-react';
+import { Link } from '@inertiajs/react'
 
 const Sidebar = () => {
     let url = history.state?.url ?? '/';
@@ -16,9 +17,9 @@ const Sidebar = () => {
                 {/* <!-- Navbar nav --> */}
                 <ul className="navbar-nav flex-column" id="sideNavbar">
                     <li className="nav-item">
-                        <InertiaLink className="nav-link has-arrow  active " href={base_url+'/'}>
+                        <Link className="nav-link has-arrow  active " href={base_url+'/'}>
                         {homeIcon} Dashboard
-                        </InertiaLink>
+                        </Link>
                     </li>
 
                     {/* <!-- Nav item --> */}
@@ -32,14 +33,14 @@ const Sidebar = () => {
                         <div id="categoryMenu" className="collapse" data-bs-parent="#sideNavbar">
                             <ul className="nav flex-column">
                                 <li className="nav-item">
-                                    <InertiaLink className="nav-link " href={ base_url+'/admin/category/create'}>
+                                    <Link className="nav-link " href={ base_url+'/admin/category/create'}>
                                         Add Category
-                                    </InertiaLink>
+                                    </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <InertiaLink className="nav-link has-arrow" href={base_url+'/admin/category'} >
+                                    <Link className="nav-link has-arrow" href={base_url+'/admin/category'} >
                                         All Category
-                                    </InertiaLink>
+                                    </Link>
                                 </li>
                             </ul>
                         </div>
@@ -54,14 +55,14 @@ const Sidebar = () => {
                         <div id="subCategoryMenu" className="collapse" data-bs-parent="#sideNavbar">
                             <ul className="nav flex-column">
                                 <li className="nav-item">
-                                    <InertiaLink className="nav-link " href={ base_url+'/admin/subcategory/create'}>
+                                    <Link className="nav-link " href={ base_url+'/admin/subcategory/create'}>
                                         Add Sub Category
-                                    </InertiaLink>
+                                    </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <InertiaLink className="nav-link has-arrow" href={base_url+'/admin/subcategory'} >
+                                    <Link className="nav-link has-arrow" href={base_url+'/admin/subcategory'} >
                                         All Sub Category
-                                    </InertiaLink>
+                                    </Link>
                                 </li>
                             </ul>
                         </div>

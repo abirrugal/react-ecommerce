@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { InertiaLink } from '@inertiajs/inertia-react';
+import { Link } from '@inertiajs/react'
 
 const NavBar = ({onToggleSidebar}) => {
 
