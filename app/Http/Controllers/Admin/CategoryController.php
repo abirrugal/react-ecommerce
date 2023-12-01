@@ -35,11 +35,11 @@ class CategoryController extends Controller
             'description' => 'required|min:2',
         ]);
 
-        $input = $validator->validated();
-
         if ($validator->fails()) {
             return Inertia::render('Category/Create', ['errors' => $validator->errors()->toArray()]);
         }
+
+        $input = $validator->validated();
 
         $image = $request->file('image');
         $name_gen = time() . '.' . $image->getClientOriginalExtension();

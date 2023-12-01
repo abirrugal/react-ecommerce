@@ -41,11 +41,11 @@ class SubCategoryController extends Controller
             'category_id' => 'required|numeric|exists:categories,id'
         ]);
 
-        $input = $validator->validated();
-
         if ($validator->fails()) {
             return Inertia::render('Subcategory/Create', ['errors' => $validator->errors()->toArray()]);
         }
+
+        $input = $validator->validated();
 
         $image = $request->file('image');
         $name_gen = time() . '.' . $image->getClientOriginalExtension();

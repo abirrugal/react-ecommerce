@@ -1,10 +1,8 @@
-import React, { useRef, useState } from 'react';
 import Front from '../../Layouts/Front';
 import { useForm } from '@inertiajs/react';
-import { router } from '@inertiajs/react'
 
 const Create = (props) => {
-    const {categories} = props;
+    const { categories } = props;
     // const imageRef = useRef('');
     // const [values, setValues] = useState({
     //     name: '',
@@ -15,13 +13,23 @@ const Create = (props) => {
     //     setValues({ ...values, [e.target.name]: e.target.value })
     // }
 
-    const {data,setData,errors,post} = useForm({
-        category_id : categories.length > 0 ? categories[0].id : '',
-        name : ''
+    const { data, setData, errors, post } = useForm({
+        category_id: categories.length > 0 ? categories[0].id : '',
+        name: ''
     });
 
-    function handleImage(e){
+    function handleImage(e) {
+        const file = e.target.files[0];
         setData('image', e.target.files[0]);
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = (event) => {
+                const image = document.getElementById('showImage')
+                image.src = event.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
     }
 
     function handleSubmit(e) {
@@ -36,7 +44,7 @@ const Create = (props) => {
 
         const formData = {
             ...data,
-            ...(data.image && {image:data.image} )
+            ...(data.image && { image: data.image })
         }
         post(base_url + '/admin/subcategory', formData);
     }
@@ -52,20 +60,23 @@ const Create = (props) => {
                         <div className="mb-3">
                             <label htmlFor="name" className="col-form-label">Name</label>
                             <div className="form-group">
-                                <input type="text" id="name" name="name" onChange={e=> setData('name', e.target.value)} value={data.name} className="form-control" placeholder="Name" />
+                                <input type="text" id="name" name="name" onChange={e => setData('name', e.target.value)} value={data.name} className="form-control" placeholder="Name" />
                             </div>
+                            {errors.name && <div className='alert alert-danger'>{errors.name}</div>}
+
                         </div>
 
                         <div className="mb-3">
                             <label for="name" className="col-form-label">Select Category :</label>
                             <div className="form-group">
-                                <select name="category_id" className="form-select mb-3" value={data.category_id} aria-label="Default select example" onChange={e=>setData('category_id', e.target.value)}>
-                                    {categories.map(({id, name})=>{
-                                        return(<option value={id}>{name}</option>)
+                                <select name="category_id" className="form-select mb-3" value={data.category_id} aria-label="Default select example" onChange={e => setData('category_id', e.target.value)}>
+                                    {categories.map(({ id, name }) => {
+                                        return (<option value={id}>{name}</option>)
                                     })}
-                                                  
+
                                 </select>
                             </div>
+                            {errors.category_id && <div className='alert alert-danger'>{errors.category_id}</div>}
                         </div>
 
                         <div className="mb-3">
@@ -73,11 +84,11 @@ const Create = (props) => {
                             <div className="form-group">
                                 <input type="file" onChange={handleImage} name="image" className="form-control" placeholder="Product image " id="image" />
                             </div>
+                            {errors.image && <div className='alert alert-danger'>{errors.image}</div>}
                             <div className="row mb-3">
                                 <div className="col-sm-3">
                                     <h6 className="mb-0"></h6>
-                                    <img src=""
-                                        alt="Admin" id="showImage" />
+                                   {data.image && <img id="showImage" alt="Selected" style={{ maxWidth: '300px' }} />} 
                                 </div>
                             </div>
                         </div>
