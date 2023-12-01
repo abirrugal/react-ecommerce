@@ -65,12 +65,17 @@ class CategoryController extends Controller
 
     public function update(Request $request, $id)
     {
-        $inputs = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|min:2',
             'description' => 'required|min:2',
             'image' => 'nullable|mimes:png,jpg,jpeg'
         ]);
 
+        if ($validator->fails()) {
+            return Inertia::render('Category/Edit', ['errors' => $validator->errors()->toArray(), 'category' => []]);
+        }
+
+        $inputs = $validator->validated();
         $category = Category::find($id);
 
         if ($request->file('image') && $request->file('image')->isValid()) {

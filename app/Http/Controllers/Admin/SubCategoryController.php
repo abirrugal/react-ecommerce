@@ -42,7 +42,8 @@ class SubCategoryController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return Inertia::render('Subcategory/Create', ['errors' => $validator->errors()->toArray()]);
+            $categories = Category::orderBy('name', 'ASC')->get();
+            return Inertia::render('Subcategory/Create', ['errors' => $validator->errors()->toArray(), 'categories' => $categories]);
         }
 
         $input = $validator->validated();

@@ -2,7 +2,9 @@ import Front from '../../Layouts/Front';
 import { useForm } from '@inertiajs/react';
 
 const Create = (props) => {
-    const { categories } = props;
+    let { categories } = props;
+    if (!categories)
+        categories = [];
     // const imageRef = useRef('');
     // const [values, setValues] = useState({
     //     name: '',
@@ -14,7 +16,7 @@ const Create = (props) => {
     // }
 
     const { data, setData, errors, post } = useForm({
-        category_id: categories.length > 0 ? categories[0].id : '',
+        category_id: categories && categories.length > 0 ? categories[0].id : '',
         name: ''
     });
 
@@ -88,7 +90,7 @@ const Create = (props) => {
                             <div className="row mb-3">
                                 <div className="col-sm-3">
                                     <h6 className="mb-0"></h6>
-                                   {data.image && <img id="showImage" alt="Selected" style={{ maxWidth: '300px' }} />} 
+                                    {data.image && <img id="showImage" alt="Selected" style={{ maxWidth: '300px' }} />}
                                 </div>
                             </div>
                         </div>

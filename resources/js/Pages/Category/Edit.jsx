@@ -4,7 +4,10 @@ import { router } from '@inertiajs/react'
 
 
 const Edit = (editValue) => {
-    const { category } = editValue;
+    let { category, errors } = editValue;
+
+    if (!errors)
+        errors = [];
 
     const imageRef = useRef('');
     const [values, setValues] = useState({
@@ -14,19 +17,14 @@ const Edit = (editValue) => {
     });
 
     function handleChange(e) {
-        console.log('Clicked');
         setValues({ ...values, [e.target.name]: e.target.value })
     }
 
     function handleSubmit(e) {
         e.preventDefault()
-        values.image = imageRef.current.files[0];
-        values._method = 'PUT';
-
         const updatedValues = {
             ...values,
             image: imageRef.current.files[0],
-            _method: 'PUT',
         };
 
         setValues(updatedValues);
@@ -46,6 +44,7 @@ const Edit = (editValue) => {
                             <div className="form-group">
                                 <input type="text" id="name" name="name" onChange={handleChange} value={values.name} className="form-control" placeholder="Name" />
                             </div>
+                            {errors.name && <div className='alert alert-danger'>{errors.name}</div>}
                         </div>
 
                         <div className="mb-3">
@@ -53,6 +52,7 @@ const Edit = (editValue) => {
                             <div className="form-group">
                                 <textarea className="form-control" name="description" onChange={handleChange} value={values.description} placeholder="Description here" id="description" ></textarea>
                             </div>
+                            {errors.description && <div className='alert alert-danger'>{errors.description}</div>}
                         </div>
 
                         <div className="mb-3">
@@ -60,10 +60,11 @@ const Edit = (editValue) => {
                             <div className="form-group">
                                 <input type="file" ref={imageRef} name="image" className="form-control" placeholder="Product image " id="image" />
                             </div>
+                            {errors.image && <div className='alert alert-danger'>{errors.image}</div>}
                             <div className="row mb-3">
                                 <div className="col-sm-3">
                                     <h6 className="mb-0"></h6>
-                                    <img src={base_url + '/' + category.image}
+                                    <img src={base_url + '/' + category.image} width="250px"
                                         alt="Admin" id="showImage" />
                                 </div>
                             </div>
