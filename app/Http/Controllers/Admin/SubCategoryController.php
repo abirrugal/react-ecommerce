@@ -73,12 +73,18 @@ class SubCategoryController extends Controller
 
     public function update(Request $request, $id)
     {
-        $inputs = $request->validate([
+
+        $validator = Validator::make($request->all(), [
             'name' => 'required|min:2',
             'category_id' => 'required|numeric|exists:categories,id',
             'image' => 'nullable|mimes:png,jpg,jpeg'
         ]);
 
+        if ($validator->fails()) {
+            return Inertia::render('Subcategory/Edit', ['errors' => $validator->errors()->toArray(), 'subcategory' => []]);
+        }
+        
+        $inputs = $validator->validated();
         $subCategory = SubCategory::find($id);
 
         if ($request->file('image') && $request->file('image')->isValid()) {

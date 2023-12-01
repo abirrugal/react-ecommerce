@@ -41,14 +41,13 @@ Route::group(['prefix'=> 'admin'], function(){
         Route::delete('/{id}', 'delete')->name('delete');
     });
 
-
-    Route::prefix('brand')->group(function() {
-        Route::get('/', [BrandController::class, 'index'])->name('brand');
-        Route::get('add', [BrandController::class, 'add'])->name('brand.add');
-        Route::post('store', [BrandController::class, 'store'])->name('brand.store');
-        Route::get('{id}/edit', [BrandController::class, 'edit'])->name('brand.edit');
-        Route::post('{id}/update', [BrandController::class, 'update'])->name('brand.update');
-        Route::get('{id}/delete', [BrandController::class, 'delete'])->name('brand.delete');
+    Route::prefix('brand')->controller(BrandController::class)->name('brand.')->group(function() {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/',  'store')->name('store');
+        Route::get('/{id}/edit',  'edit')->name('edit');
+        Route::put('/{id}',  'update')->name('update');
+        Route::delete('/{id}', 'delete')->name('delete');
     });
 
     Route::prefix('product')->group(function() {

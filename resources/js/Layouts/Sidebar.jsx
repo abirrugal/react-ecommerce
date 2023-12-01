@@ -11,14 +11,14 @@ const Sidebar = () => {
             <div className="nav-scroller">
                 {/* <!-- Brand logo --> */}
                 <a className="navbar-brand" href="/">
-                    <img src={base_url+'/images/logo/logo.png'} className='mr-2' alt="logo" />
+                    <img src={base_url + '/images/logo/logo.png'} className='mr-2' alt="logo" />
                     <span className="text-white">Admin Panel</span>
                 </a>
                 {/* <!-- Navbar nav --> */}
                 <ul className="navbar-nav flex-column" id="sideNavbar">
                     <li className="nav-item">
-                        <Link className="nav-link has-arrow  active " href={base_url+'/'}>
-                        {homeIcon} Dashboard
+                        <Link className="nav-link has-arrow  active " href={base_url + '/'}>
+                            {homeIcon} Dashboard
                         </Link>
                     </li>
 
@@ -27,18 +27,18 @@ const Sidebar = () => {
                     {/* Categories  */}
 
                     <li className="nav-item">
-                        <a className="nav-link has-arrow  collapsed " href="#!" data-bs-toggle="collapse" data-bs-target="#categoryMenu" aria-expanded="false" aria-controls="navPages">                   
-                          {menuIcon} Category
+                        <a className="nav-link has-arrow  collapsed " href="#!" data-bs-toggle="collapse" data-bs-target="#categoryMenu" aria-expanded="false" aria-controls="navPages">
+                            {menuIcon} Category
                         </a>
                         <div id="categoryMenu" className="collapse" data-bs-parent="#sideNavbar">
                             <ul className="nav flex-column">
                                 <li className="nav-item">
-                                    <Link className="nav-link " href={ base_url+'/admin/category/create'}>
+                                    <Link className="nav-link " href={base_url + '/admin/category/create'}>
                                         Add Category
                                     </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link className="nav-link has-arrow" href={base_url+'/admin/category'} >
+                                    <Link className="nav-link has-arrow" href={base_url + '/admin/category'} >
                                         All Category
                                     </Link>
                                 </li>
@@ -49,19 +49,41 @@ const Sidebar = () => {
                     {/* SubCategory  */}
 
                     <li className="nav-item">
-                        <a className="nav-link has-arrow  collapsed " href="#!" data-bs-toggle="collapse" data-bs-target="#subCategoryMenu" aria-expanded="false" aria-controls="navPages">                   
-                          {menuIcon}Sub Category
+                        <a className="nav-link has-arrow  collapsed " href="#!" data-bs-toggle="collapse" data-bs-target="#subCategoryMenu" aria-expanded="false" aria-controls="navPages">
+                            {menuIcon}Sub Category
                         </a>
                         <div id="subCategoryMenu" className="collapse" data-bs-parent="#sideNavbar">
                             <ul className="nav flex-column">
                                 <li className="nav-item">
-                                    <Link className="nav-link " href={ base_url+'/admin/subcategory/create'}>
+                                    <Link className="nav-link " href={base_url + '/admin/subcategory/create'}>
                                         Add Sub Category
                                     </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link className="nav-link has-arrow" href={base_url+'/admin/subcategory'} >
+                                    <Link className="nav-link has-arrow" href={base_url + '/admin/subcategory'} >
                                         All Sub Category
+                                    </Link>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    {/* Brand  */}
+
+                    <li className="nav-item">
+                        <a className="nav-link has-arrow  collapsed " href="#!" data-bs-toggle="collapse" data-bs-target="#brandMenu" aria-expanded="false" aria-controls="navPages">
+                            {menuIcon}Brand
+                        </a>
+                        <div id="brandMenu" className="collapse" data-bs-parent="#sideNavbar">
+                            <ul className="nav flex-column">
+                                <li className="nav-item">
+                                    <Link className="nav-link " href={base_url + '/admin/brand/create'}>
+                                        Add Brand
+                                    </Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link has-arrow" href={base_url + '/admin/brand'} >
+                                        All Brand
                                     </Link>
                                 </li>
                             </ul>

@@ -1,119 +1,101 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Brand;
+use Illuminate\Support\Facades\Validator;
+use Inertia\Inertia;
 
 class BrandController extends Controller
 {
-    public function index(){
-
+    public function index()
+    {
         $brands = Brand::latest()->paginate(15);
 
-        return view('admin.brand.index',compact('brands'));
+        return Inertia::render('Brand/Index', ['brands' => $brands]);
     }
 
 
-    public function add(){
-
-        return view('admin.brand.create');
+    public function create()
+    {
+        return Inertia::render('Brand/Create');
     }
 
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:2',
+            'description' => 'required|min:2',
+            'image' => 'required|mimes:png,jpg,jpeg'
+        ]);
+
+        if ($validator->fails()) {
+            return Inertia::render('Brand/Create', ['errors' => $validator->errors()->toArray()]);
+        }
+        $inputs = $validator->validated();
 
         $image = $request->file('image');
-        $name_gen = time().'.'.$image->getClientOriginalExtension();
-        $save_url = 'images/brand/'.$name_gen;
+        $name_gen = time() . '.' . $image->getClientOriginalExtension();
+        $save_url = 'images/brand/' . $name_gen;
         $image->move(public_path('images/brand'), $name_gen);
+        //Save image url and slug in array
+        $inputs['image'] = $save_url;
+        $inputs['slug'] = strtolower(str_replace(' ', '-', $request->name));
+        Brand::create($inputs);
 
-        Brand::insert([
-            'name' => $request->name,
-            'slug' => strtolower(str_replace(' ', '-',$request->name)),
-            'description' => $request->description,
-            'image' => $save_url,
-        ]);
-
-        $notification = array(
-            'message' => 'Brand Add Successfully',
-            'alert-type' => 'success'
-        );
-
-        return redirect()->route('brand')->with($notification);
+        return redirect()->route('brand.index');
     }
 
 
-    public function edit($id){
-
+    public function edit($id)
+    {
         $brand = Brand::findOrFail($id);
 
-        return view('admin.brand.edit',compact('brand'));
+        return Inertia::render('Brand/Edit', ['brand' => $brand]);
     }
 
 
-    public function update(Request $request){
+    public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:2',
+            'description' => 'required|min:2',
+            'image' => 'nullable|mimes:png,jpg,jpeg'
+        ]);
 
-        $cat_id = $request->id;
-        $old_img = $request->old_image;
+        if ($validator->fails()) {
+            return Inertia::render('Subcategory/Edit', ['errors' => $validator->errors()->toArray(), 'subcategory' => []]);
+        }
 
-        if ($request->file('image')) {
+        $inputs = $validator->validated();
+        $brand = Brand::find($id);
 
+        if ($request->file('image') && $request->file('image')->isValid()) {
+            if ($brand && file_exists($brand->image)) {
+                unlink($brand->image);
+            }
             $image = $request->file('image');
-            $name_gen = time().'.'.$image->getClientOriginalExtension();
-            $save_url = 'images/brand/'.$name_gen;
-
+            $name_gen = time() . '.' . $image->getClientOriginalExtension();
+            $save_url = 'images/brand/' . $name_gen;
             $image->move(public_path('images/brand'), $name_gen);
-
-        if (file_exists($old_img)) {
-           unlink($old_img);
+            $inputs['image'] = $save_url;
         }
 
-        Brand::findOrFail($cat_id)->update([
-            'name' => $request->name,
-            'slug' => strtolower(str_replace(' ', '-',$request->name)),
-            'description' => $request->description,
-            'image' => $save_url,
-        ]);
+        Brand::findOrFail($id)->update($inputs);
 
-        $notification = array(
-            'message' => 'Brand Update Successfully',
-            'alert-type' => 'success'
-        );
-
-        return redirect()->route('brand')->with($notification);
-
-        } else {
-
-             Brand::findOrFail($cat_id)->update([
-                'name' => $request->name,
-                'slug' => strtolower(str_replace(' ', '-',$request->name)),
-                'description' => $request->description,
-        ]);
-
-        $notification = array(
-            'message' => 'Brand Update Successfully',
-            'alert-type' => 'success'
-        );
-
-        return redirect()->route('brand')->with($notification);
-        }
+        return redirect()->route('brand.index');
     }
 
-
-    public function delete($id){
-
+    public function delete($id)
+    {
         $brand = Brand::findOrFail($id);
         $img = $brand->image;
-        unlink($img );
-
+        unlink($img);
         Brand::findOrFail($id)->delete();
 
-        $notification = array(
-            'message' => 'Brand Delete Successfully',
-            'alert-type' => 'success'
-        );
-
-        return redirect()->route('brand')->with($notification);
+        return redirect()->route('brand.index');
     }
 }
