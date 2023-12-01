@@ -32,7 +32,7 @@ const Create = (data) => {
         <Front title="Create Category">
             <div className="card col-md-8 col-lg-6 my-3">
                 <div className="card-header">
-                    <h4>Add Sub Category</h4>
+                    <h4>Edit Sub Category</h4>
                 </div>
                 <div className="card-body">
                     <form id="basic-form" onSubmit={handleSubmit}>

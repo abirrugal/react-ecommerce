@@ -10,9 +10,14 @@ use Inertia\Inertia;
 
 class BrandController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $brands = Brand::latest()->paginate(15);
+        $brands = Brand::query();
+
+        if ($request->search) {
+            $brands = $brands->where('name', 'LIKE', "%{$request->search}%");
+        }
+        $brands = $brands->latest()->paginate(15);
 
         return Inertia::render('Brand/Index', ['brands' => $brands]);
     }
@@ -67,7 +72,7 @@ class BrandController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return Inertia::render('Subcategory/Edit', ['errors' => $validator->errors()->toArray(), 'subcategory' => []]);
+            return Inertia::render('Brand/Edit', ['errors' => $validator->errors()->toArray(), 'brand' => []]);
         }
 
         $inputs = $validator->validated();
