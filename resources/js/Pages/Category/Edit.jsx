@@ -13,6 +13,7 @@ const Edit = (editValue) => {
     const [values, setValues] = useState({
         name: category.name,
         description: category.description,
+        image:'',
         _method: 'PUT'
     });
 
@@ -23,12 +24,26 @@ const Edit = (editValue) => {
     function handleSubmit(e) {
         e.preventDefault()
         const updatedValues = {
-            ...values,
-            image: imageRef.current.files[0],
+            ...values
         };
-
         setValues(updatedValues);
+        
         router.post(base_url + '/admin/category/' + category.id, updatedValues)
+    }
+
+    function handleImage(e){
+        const file = e.target.files[0];
+        if(file){
+            const reader = new FileReader();
+            reader.onload = (event)=>{
+                const image = document.getElementById('showImage');
+                if(image){
+                    image.src = event.target.result;
+                }
+            }
+            reader.readAsDataURL(file);
+            setValues({...values, image:file})
+        }
     }
 
     return (
@@ -58,13 +73,13 @@ const Edit = (editValue) => {
                         <div className="mb-3">
                             <label htmlFor="image" className="col-form-label">Image</label>
                             <div className="form-group">
-                                <input type="file" ref={imageRef} name="image" className="form-control" placeholder="Product image " id="image" />
+                                <input type="file" ref={imageRef} onChange={handleImage} name="image" className="form-control" placeholder="Product image " id="image" />
                             </div>
                             {errors.image && <div className='alert alert-danger'>{errors.image}</div>}
                             <div className="row mb-3">
                                 <div className="col-sm-3">
                                     <h6 className="mb-0"></h6>
-                                    <img src={base_url + '/' + category.image} width="250px"
+                                    <img src={base_url + '/' + category.image} onChange={handleImage} width="250px"
                                         alt="Admin" id="showImage" />
                                 </div>
                             </div>

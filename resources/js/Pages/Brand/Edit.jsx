@@ -31,7 +31,7 @@ function Edit({brand}) {
 
         const updateData = {
             ...data,
-            ...(data.image && {image:data.image})
+            // ...(data.image && {image:data.image})
         }
         setData(updateData);
         post(base_url+'/admin/brand/'+brand.id, updateData);
