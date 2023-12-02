@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Brand;
+use Inertia\Inertia;
 
 class ProductController extends Controller
 {
@@ -16,7 +17,9 @@ class ProductController extends Controller
 
         $products = Product::where('status','1')->latest()->paginate(15);
 
-        return view('admin.product.index',compact('products'));
+        return Inertia::render('Product/Index');
+
+        // return view('admin.product.index',compact('products'));
     }
 
 

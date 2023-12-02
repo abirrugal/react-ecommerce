@@ -107,6 +107,23 @@ const Sidebar = () => {
                         </div>
                     </li>
 
+                    {/* Product  */}
+
+                    <li className="nav-item">
+                        <a className="nav-link has-arrow  collapsed " href="#!" data-bs-toggle="collapse" data-bs-target="#productMenu" aria-expanded="false" aria-controls="navPages">
+                            {menuIcon}Users
+                        </a>
+                        <div id="productMenu" className="collapse" data-bs-parent="#sideNavbar">
+                            <ul className="nav flex-column">
+                                <li className="nav-item">
+                                    <Link className="nav-link has-arrow" href={base_url + '/admin/product'} >
+                                        All Users
+                                    </Link>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
                 </ul>
             </div>
         </nav>
