@@ -48,12 +48,12 @@
                 <div id="subcatMenu" class="collapse" data-bs-parent="#sideNavbar">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link " href="{{ route('subcategory.add') }}">
+                            <a class="nav-link " href="{{ route('subcategory.create') }}">
                             Add Sub Category
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link has-arrow"  href="{{ route('subcategory') }}" >
+                            <a class="nav-link has-arrow"  href="{{ route('subcategory.index') }}" >
                             All Sub Category
                             </a>
                         </li>
@@ -71,12 +71,12 @@
                 <div id="brandPage" class="collapse" data-bs-parent="#sideNavbar">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link " href="{{ route('brand.add') }}">
+                            <a class="nav-link " href="{{ route('brand.create') }}">
                             Add Brand
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link has-arrow"  href="{{ route('brand') }}" >
+                            <a class="nav-link has-arrow"  href="{{ route('brand.index') }}" >
                             All Brand
                             </a>
                         </li>

@@ -1,56 +1,58 @@
-import Front from '../Layouts/Front';
-import { router } from '@inertiajs/react'
-import { Link } from '@inertiajs/react'
-import Search from '../Includes/Search';
-import Pagination from '../Includes/Pagination';
+import React from 'react'
+import Front from '../../Layouts/Front'
+import Search from '../../Includes/Search'
+import Pagination from '../../Includes/Pagination'
 
-const Users = ( props ) => {
-    const { users } = props;
-    function deleteItem(param) {
-        var result = confirm("Want to delete?");
-        if (result) {
-            router.post(base_url + '/users/' + param, { "_method": "DELETE" })
+function Users({users}) {
+    function getRoleName(role){
+        if(role == 2){
+            return 'Active'
+        }
+        if(role == 1){
+            return 'Admin'
+        }
+        if(role == 0){
+            return 'Inactive'
         }
     }
-
-    return (
-        <Front title="User List">
-            <div className='d-flex justify-content-between'>
-                <h4 className='my-4 text-center'>User List</h4>
-
-                <Search url={base_url + '/users'} />
-
+  return (
+    <Front title="Category List">
+    <div className="card my-3">
+        <div className="card-header d-flex justify-content-between align-items-center">
+            <h4>Users</h4>
+            <div>
+                <Search url={base_url + '/admin/users'} />
             </div>
+        </div>
+        <div className="card-body p-0">
             <table className="table">
-                <thead className="thead-light">
-                    <tr>
-                        <th scope="col">Profile Image</th>
+                <thead className="bg-light">
+                    <tr className="text-white">
+                        <th scope="col">Name</th>
                         <th scope="col">User Name</th>
                         <th scope="col">Email</th>
-                        <th scope="col">Action</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Role</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {users.data.length > 0 ? (users.data.map(({id,name,email,image}) => {
-                        return (
-                            <tr key={id}>
-                                <td>{image ? (<img src={base_url + '/' + image} height="100px"  width="100px" alt="" />):("Image not found")}</td>
-                                <td>{name}</td>
-                                <td>{email}</td>
-                                <td>
-                                    <Link className='text-white' href={base_url + '/users/' + id + '/edit'}><button className='btn btn-info mr-2'> Edit </button></Link>
-                                    <button className='btn btn-danger' onClick={() => deleteItem(id)}>Delete</button>
-                                </td>
-                            </tr>
-                        )
-                    }
-                    )) : (<tr className='alert alert-secondary text-center'><td className='my-3' colspan="4">No data found</td></tr>)}
+                    {users.data ? (users.data.map(({ id, first_name, last_name, username, email, phone, role }) => {
+                        return (<tr key={id}>
+                            <td>{first_name+' '+last_name}</td>
+                            <td>{ username}</td>
+                            <td>{email}</td>
+                            <td>{phone}</td>
+                            <td>{getRoleName(role)}</td>
+                        </tr>)
+                    })) : ((<tr className='alert alert-secondary text-center'><td className='my-3' colspan="6">No data found</td></tr>))}
 
                 </tbody>
             </table>
-            <Pagination class="mt-6" links={users.links} />
-        </Front>
-    )
+            <div className='d-flex justify-content-center'><Pagination links={users.links} /></div>
+        </div>
+    </div>
+</Front>
+  )
 }
 
 export default Users
