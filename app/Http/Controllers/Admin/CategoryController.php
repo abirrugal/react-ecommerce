@@ -33,6 +33,7 @@ class CategoryController extends Controller
             'name' => 'required|string',
             'image' => 'required|image|mimes:png,jpg,jpeg',
             'description' => 'required|min:2',
+            'status' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -68,7 +69,8 @@ class CategoryController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:2',
             'description' => 'required|min:2',
-            'image' => 'nullable|mimes:png,jpg,jpeg'
+            'image' => 'nullable|mimes:png,jpg,jpeg',
+            'status' => 'required'
         ]);
 
         if ($validator->fails()) {

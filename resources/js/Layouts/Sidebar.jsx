@@ -124,6 +124,29 @@ const Sidebar = () => {
                         </div>
                     </li>
 
+                
+                    {/* Product Variant  */}
+
+                    <li className="nav-item">
+                        <a className="nav-link has-arrow  collapsed " href="#!" data-bs-toggle="collapse" data-bs-target="#variantMenu" aria-expanded="false" aria-controls="navPages">
+                            {menuIcon} Product Variants
+                        </a>
+                        <div id="variantMenu" className="collapse" data-bs-parent="#sideNavbar">
+                            <ul className="nav flex-column">
+                                <li className="nav-item">
+                                    <Link className="nav-link " href={base_url + '/admin/attribute/create'}>
+                                        Add Variant
+                                    </Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link has-arrow" href={base_url + '/admin/attribute'} >
+                                        Variant List
+                                    </Link>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
                 </ul>
             </div>
         </nav>

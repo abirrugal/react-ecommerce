@@ -98,7 +98,8 @@ class BrandController extends Controller
     {
         $brand = Brand::findOrFail($id);
         $img = $brand->image;
-        unlink($img);
+        if (file_exists($img))
+            unlink($img);
         Brand::findOrFail($id)->delete();
 
         return redirect()->route('brand.index');

@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\SubCategoryController;
+use App\Http\Controllers\AttributeController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -42,6 +43,15 @@ Route::group(['prefix'=> 'admin'], function(){
     });
 
     Route::prefix('brand')->controller(BrandController::class)->name('brand.')->group(function() {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/',  'store')->name('store');
+        Route::get('/{id}/edit',  'edit')->name('edit');
+        Route::put('/{id}',  'update')->name('update');
+        Route::delete('/{id}', 'delete')->name('delete');
+    });
+
+    Route::prefix('attribute')->controller(AttributeController::class)->name('attribute.')->group(function() {
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::post('/',  'store')->name('store');

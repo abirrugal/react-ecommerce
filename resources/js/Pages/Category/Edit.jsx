@@ -13,7 +13,8 @@ const Edit = (editValue) => {
     const [values, setValues] = useState({
         name: category.name,
         description: category.description,
-        image:'',
+        status: category.status,
+        image: '',
         _method: 'PUT'
     });
 
@@ -24,26 +25,31 @@ const Edit = (editValue) => {
     function handleSubmit(e) {
         e.preventDefault()
         const updatedValues = {
-            ...values
+            ...values,
+            ...(values.image && {image:values.image})
         };
         setValues(updatedValues);
-        
+
         router.post(base_url + '/admin/category/' + category.id, updatedValues)
     }
 
-    function handleImage(e){
+    function handleImage(e) {
         const file = e.target.files[0];
-        if(file){
+        if (file) {
             const reader = new FileReader();
-            reader.onload = (event)=>{
+            reader.onload = (event) => {
                 const image = document.getElementById('showImage');
-                if(image){
+                if (image) {
                     image.src = event.target.result;
                 }
             }
             reader.readAsDataURL(file);
-            setValues({...values, image:file})
+            setValues({ ...values, image: file })
         }
+    }
+
+    function statusHandle(e){
+        setValues({...values, status:e.target.checked})
     }
 
     return (
@@ -83,6 +89,10 @@ const Edit = (editValue) => {
                                         alt="Admin" id="showImage" />
                                 </div>
                             </div>
+                        </div>
+                        <div className="form-check form-switch my-3">
+                            <input className="form-check-input" name='status' onChange={statusHandle} type="checkbox" id="status" checked={values.status} />
+                            <label className="form-check-label" htmlForfor="status">Status</label>
                         </div>
                         <button type="submit" className="btn btn-primary px-4">Update Category</button>
                     </form>
