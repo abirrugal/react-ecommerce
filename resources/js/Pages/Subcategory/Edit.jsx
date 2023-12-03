@@ -9,6 +9,7 @@ const Create = (data) => {
     const imageRef = useRef('');
     const [values, setValues] = useState({
         name: subcategory.name,
+        status: subcategory.status,
         category_id: subcategory.category_id,
         _method: 'PUT'
     });
@@ -19,7 +20,6 @@ const Create = (data) => {
 
     function handleSubmit(e) {
         e.preventDefault()
-        values.image = imageRef.current.files[0];
         const updatedValues = {
             ...values,
             image: imageRef.current.files[0]
@@ -28,6 +28,9 @@ const Create = (data) => {
         router.post(base_url + '/admin/subcategory/' + subcategory.id, updatedValues)
     }
 
+    function onStatusChange(e){
+        setValues({...values, status:e.target.checked})
+    }
     return (
         <Front title="Create Category">
             <div className="card col-md-8 col-lg-6 my-3">
@@ -70,6 +73,10 @@ const Create = (data) => {
                                         alt="Admin" id="showImage" />
                                 </div>
                             </div>
+                        </div>
+                        <div className="form-check form-switch my-3">
+                            <input className="form-check-input" name='status' onChange={onStatusChange} type="checkbox" id="status" checked={values.status} />
+                            <label className="form-check-label" htmlForfor="status">Status</label>
                         </div>
                         <button type="submit" className="btn btn-primary px-4">Add Sub Category</button>
                     </form>

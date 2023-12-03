@@ -38,7 +38,8 @@ class SubCategoryController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'image' => 'required|image|mimes:png,jpg,jpeg',
-            'category_id' => 'required|numeric|exists:categories,id'
+            'category_id' => 'required|numeric|exists:categories,id',
+            'status' => 'required|boolean'
         ]);
 
         if ($validator->fails()) {
@@ -77,7 +78,8 @@ class SubCategoryController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:2',
             'category_id' => 'required|numeric|exists:categories,id',
-            'image' => 'nullable|mimes:png,jpg,jpeg'
+            'image' => 'nullable|mimes:png,jpg,jpeg',
+            'status' => 'required|boolean'
         ]);
 
         if ($validator->fails()) {

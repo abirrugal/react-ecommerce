@@ -14,7 +14,6 @@ const Edit = (editValue) => {
         name: category.name,
         description: category.description,
         status: category.status,
-        image: '',
         _method: 'PUT'
     });
 

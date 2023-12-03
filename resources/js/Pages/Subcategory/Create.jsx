@@ -17,7 +17,8 @@ const Create = (props) => {
 
     const { data, setData, errors, post } = useForm({
         category_id: categories && categories.length > 0 ? categories[0].id : '',
-        name: ''
+        name: '',
+        status:true
     });
 
     function handleImage(e) {
@@ -93,6 +94,10 @@ const Create = (props) => {
                                     {data.image && <img id="showImage" alt="Selected" style={{ maxWidth: '300px' }} />}
                                 </div>
                             </div>
+                        </div>
+                        <div className="form-check form-switch my-3">
+                            <input className="form-check-input" name='status' onChange={e => setData('status', e.target.checked)} type="checkbox" id="status" checked={data.status} />
+                            <label className="form-check-label" htmlForfor="status">Status</label>
                         </div>
                         <button type="submit" className="btn btn-primary px-4">Add Sub Category</button>
                     </form>

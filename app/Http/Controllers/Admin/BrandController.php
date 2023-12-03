@@ -34,7 +34,8 @@ class BrandController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:2',
             'description' => 'required|min:2',
-            'image' => 'required|mimes:png,jpg,jpeg'
+            'image' => 'required|mimes:png,jpg,jpeg',
+            'status' => 'required|boolean'
         ]);
 
         if ($validator->fails()) {
@@ -68,7 +69,8 @@ class BrandController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:2',
             'description' => 'required|min:2',
-            'image' => 'nullable|mimes:png,jpg,jpeg'
+            'image' => 'nullable|mimes:png,jpg,jpeg',
+            'status' => 'required|boolean'
         ]);
 
         if ($validator->fails()) {
