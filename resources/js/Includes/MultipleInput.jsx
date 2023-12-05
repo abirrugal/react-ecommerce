@@ -69,19 +69,14 @@ const MultipleInput = ({ onSizeDataChange }) => {
                 />
               </td>
               <td>
-                <button
-                  type="button"
-                  className="btn btn-danger btn-sm remove-table-row"
-                  onClick={() => handleRemoveSize(index)}
-                >
-                  Remove
-                </button>
+
+              <button type="button" className="btn btn-danger remove-table-row" onClick={() => handleRemoveSize(index)}>Remove</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <button type="button" onClick={handleAddSize}>
+      <button type="button" className='btn btn-primary remove-table-row mt-2' onClick={handleAddSize}>
         Add Size
       </button>
     </div>
