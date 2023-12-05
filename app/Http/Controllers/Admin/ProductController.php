@@ -17,7 +17,7 @@ class ProductController extends Controller
 
         $products = Product::where('status','1')->latest()->paginate(15);
 
-        return Inertia::render('Product/Index');
+        return Inertia::render('Product/Form');
 
         // return view('admin.product.index',compact('products'));
     }

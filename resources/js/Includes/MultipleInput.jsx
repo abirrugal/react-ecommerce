@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 
-const SizeInputComponent = () => {
+const MultipleInput = ({ onSizeDataChange }) => {
   const [sizes, setSizes] = useState([
     { attributeName: '', attributeValue: '', additionalPrice: '' },
   ]);
 
   const handleAddSize = () => {
     setSizes([...sizes, { attributeName: '', attributeValue: '', additionalPrice: '' }]);
-    console.log(sizes);
   };
 
   const handleRemoveSize = (index) => {
     const updatedSizes = [...sizes];
     updatedSizes.splice(index, 1);
     setSizes(updatedSizes);
+    onSizeDataChange(updatedSizes); // Send updated sizes data to parent
   };
 
   const handleInputChange = (index, event) => {
@@ -21,6 +21,7 @@ const SizeInputComponent = () => {
     const updatedSizes = [...sizes];
     updatedSizes[index][name] = value;
     setSizes(updatedSizes);
+    onSizeDataChange(updatedSizes); // Send updated sizes data to parent
   };
 
   return (
@@ -87,4 +88,4 @@ const SizeInputComponent = () => {
   );
 };
 
-export default SizeInputComponent;
+export default MultipleInput;
