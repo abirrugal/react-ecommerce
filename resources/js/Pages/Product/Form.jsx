@@ -20,19 +20,6 @@ const FormComponent = () => {
 
   return (
     <Front title={'Create Product'}>
-      {/* <form onSubmit={handleSubmit}>
-
-      <input 
-        type="text"
-        name="fieldName"
-        value={otherFormData.name}
-        onChange={(e) => setOtherFormData({ ...otherFormData, fieldName: e.target.value })}
-      />
-      <MultipleInput onSizeDataChange={handleSizeDataChange} />
-
-      <button type="submit">Submit</button>
-    </form> */}
-
 
       <div class="container">
         <div class="block-header mt-5">
