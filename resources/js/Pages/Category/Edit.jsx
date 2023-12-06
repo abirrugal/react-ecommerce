@@ -1,35 +1,40 @@
 import React, { useRef, useState } from 'react';
 import Front from '../../Layouts/Front';
-import { router } from '@inertiajs/react'
+import { router, usePage } from '@inertiajs/react'
 
+const Edit = ({ category }) => {
+    // if (!errors) {
+    //     errors = {};
+    // }
 
-const Edit = (editValue) => {
-    let { category, errors } = editValue;
+    let { errors } = usePage().props;
 
-    if (!errors)
-        errors = [];
+    console.log(errors);
+    //     if (!errors) {
+    //     errors = {};
+    // }
 
     const imageRef = useRef('');
     const [values, setValues] = useState({
-        name: category.name,
-        description: category.description,
-        status: category.status,
+        name: category.name || '',
+        description: category.description || '',
+        status: category.status || false,
         _method: 'PUT'
     });
 
     function handleChange(e) {
-        setValues({ ...values, [e.target.name]: e.target.value })
+        setValues({ ...values, [e.target.name]: e.target.value });
     }
 
     function handleSubmit(e) {
-        e.preventDefault()
+        e.preventDefault();
         const updatedValues = {
             ...values,
-            ...(values.image && {image:values.image})
+            ...(values.image && { image: values.image })
         };
         setValues(updatedValues);
 
-        router.post(base_url + '/admin/category/' + category.id, updatedValues)
+        router.post(`/admin/category/${category.id}`, updatedValues);
     }
 
     function handleImage(e) {
@@ -41,14 +46,14 @@ const Edit = (editValue) => {
                 if (image) {
                     image.src = event.target.result;
                 }
-            }
+            };
             reader.readAsDataURL(file);
-            setValues({ ...values, image: file })
+            setValues({ ...values, image: file });
         }
     }
 
-    function statusHandle(e){
-        setValues({...values, status:e.target.checked})
+    function statusHandle(e) {
+        setValues({ ...values, status: e.target.checked });
     }
 
     return (
@@ -64,7 +69,7 @@ const Edit = (editValue) => {
                             <div className="form-group">
                                 <input type="text" id="name" name="name" onChange={handleChange} value={values.name} className="form-control" placeholder="Name" />
                             </div>
-                            {errors.name && <div className='alert alert-danger'>{errors.name}</div>}
+                            {/* {errors.name && <div className='alert alert-danger'>{errors.name}</div>} */}
                         </div>
 
                         <div className="mb-3">
@@ -72,7 +77,7 @@ const Edit = (editValue) => {
                             <div className="form-group">
                                 <textarea className="form-control" name="description" onChange={handleChange} value={values.description} placeholder="Description here" id="description" ></textarea>
                             </div>
-                            {errors.description && <div className='alert alert-danger'>{errors.description}</div>}
+                            {/* {errors.description && <div className='alert alert-danger'>{errors.description}</div>} */}
                         </div>
 
                         <div className="mb-3">
@@ -80,7 +85,7 @@ const Edit = (editValue) => {
                             <div className="form-group">
                                 <input type="file" ref={imageRef} onChange={handleImage} name="image" className="form-control" placeholder="Product image " id="image" />
                             </div>
-                            {errors.image && <div className='alert alert-danger'>{errors.image}</div>}
+                            {/* {errors.image && <div className='alert alert-danger'>{errors.image}</div>} */}
                             <div className="row mb-3">
                                 <div className="col-sm-3">
                                     <h6 className="mb-0"></h6>
@@ -98,7 +103,7 @@ const Edit = (editValue) => {
                 </div>
             </div>
         </Front>
-    )
-}
+    );
+};
 
-export default Edit
+export default Edit;

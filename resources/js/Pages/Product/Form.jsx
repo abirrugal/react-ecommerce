@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import MultipleInput from './../../Includes/MultipleInput';
+import SizeInputs from './../../Includes/MultipleInput';
 import Front from './../../Layouts/Front'
 
 const FormComponent = () => {
@@ -111,7 +111,7 @@ const FormComponent = () => {
 
             <div class="row">
 
-            <MultipleInput onSizeDataChange={handleSizeDataChange} />
+            <SizeInputs onSizeDataChange={handleSizeDataChange} />
 
             </div>
 

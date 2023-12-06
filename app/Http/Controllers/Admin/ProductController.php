@@ -13,22 +13,24 @@ use Inertia\Inertia;
 
 class ProductController extends Controller
 {
-    public function index (){
+    public function index (Request $request){
 
-        $products = Product::where('status','1')->latest()->paginate(15);
+        $products = Product::query();
+        if($request->search){
+           $products = $products->where('name', 'LIKE', "%{$request->search}%");
+        }
+        $products = $products->where('status','1')->latest()->paginate(15);
 
-        return Inertia::render('Product/Form');
-
-        // return view('admin.product.index',compact('products'));
+        return Inertia::render('Product/Index', ['products'=>$products]);
     }
 
 
-    public function add(){
+    public function create(){
 
         $categories = Category::latest()->get();
         $brands = Brand::latest()->get();
-
-        return view('admin.product.create',compact('brands','categories'));
+        return Inertia::render('Product/Form');
+        // return view('admin.product.create',compact('brands','categories'));
     }
 
 

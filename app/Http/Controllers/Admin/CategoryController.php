@@ -72,13 +72,15 @@ class CategoryController extends Controller
             'image' => 'nullable|mimes:png,jpg,jpeg',
             'status' => 'required'
         ]);
+        $category = Category::find($id);
 
         if ($validator->fails()) {
             return Inertia::render('Category/Edit', ['errors' => $validator->errors()->toArray(), 'category' => []]);
         }
 
+
         $inputs = $validator->validated();
-        $category = Category::find($id);
+
 
         if ($request->file('image') && $request->file('image')->isValid()) {
             if ($category && file_exists($category->image)) {
