@@ -3,22 +3,29 @@ import SizeInputs from '../../Includes/MultipleInput';
 import Front from '../../Layouts/Front'
 import { router } from '@inertiajs/react';
 import axios from 'axios';
+import { useForm } from '@inertiajs/react'
 
 const Create = ({ categories, brands }) => {
-  const [otherFormData, setOtherFormData] = useState({ name: '' });
+  const { data, setData, post, errors } = useForm({
+    name: '',
+    price: '',
+    discount: '',
+    sizes: '',
+    stock_in: '',
+    description: '',
+    image: '',
+    images: '',
+    subcategory_id: ''
+  });
   const [subcategories, setSubcategories] = useState([]);
-  const [sizes, setSizes] = useState([
-    { attributeName: '', attributeValue: '', additionalPrice: '' },
-  ]);
 
   const handleSizeDataChange = (updatedSizes) => {
-    setSizes(updatedSizes); // Update sizes data in FormComponent state
+    setData('sizes', updatedSizes);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Handle form submission, including otherFormData and sizes state
-    // console.log(sizes);
+    console.log(data);
   };
 
   const getSubCategory = (e) => {
@@ -29,13 +36,11 @@ const Create = ({ categories, brands }) => {
         let subcategoryList = res.data.subcategories;
         const updatedSubcategories = subcategoryList.map(({ id, name }) => ({ id, name }));
         setSubcategories(updatedSubcategories);
-        // console.log(subcategories);
       })
   }
 
   return (
     <Front title={'Create Product'}>
-
       <div class="container">
         <div class="block-header mt-5">
           <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
@@ -51,10 +56,8 @@ const Create = ({ categories, brands }) => {
             </div>
           </div>
         </div>
-
         <div class="row clearfix bg-white p-5 ">
-          <form id="basic-form" method="post" action="" enctype="multipart/form-data" >
-
+          <form id="basic-form" method="post" action="" enctype="multipart/form-data" onSubmit={handleSubmit}>
             <div class="row">
               <div class="col-sm-4 mb-3">
                 <label for="category_id" class="col-form-label">Category Name :</label>
@@ -65,15 +68,13 @@ const Create = ({ categories, brands }) => {
                   })}
                 </select>
               </div>
-
               <div class="col-sm-4 mb-3">
                 <label for="subcategory_id" class="col-form-label">Sub Category Name :</label>
-                <select name="subcategory_id" class="form-select" id="subcategory_id">
+                <select name="subcategory_id" class="form-select" id="subcategory_id" onChange={(e) => setData('subcategory_id', e.target.value)}>
                   <option>Select Sub Category</option>
-                  {subcategories.map(({id,name})=>{
+                  {subcategories.map(({ id, name }) => {
                     return (<option value={id}>{name}</option>)
                   })}
-                  
                 </select>
               </div>
               <div class="col-sm-4 mb-3">
@@ -86,53 +87,47 @@ const Create = ({ categories, brands }) => {
                 </select>
               </div>
             </div>
-
             <div class="row">
               <div class="col-sm-12 mb-3">
                 <label for="name" class="col-form-label">Product Name :</label>
                 <div class="form-group">
-                  <input type="text" id="name" name="name" minlength="3" class="form-control" placeholder="Product Name" />
+                  <input type="text" id="name" name="name" onChange={(e) => setData('name', e.target.value)} minlength="3" class="form-control" placeholder="Product Name" />
                 </div>
               </div>
             </div>
-
             <div class="row">
               <div class="col-sm-4 mb-3">
                 <label for="price" class="col-form-label">Product Price :</label>
                 <div class="form-group">
-                  <input type="text" id="price" name="price" class="form-control" placeholder="Product Price" />
+                  <input type="number" id="price" name="price" onChange={(e) => setData('price', e.target.value)} class="form-control" placeholder="Product Price" />
                 </div>
               </div>
               <div class="col-sm-4 mb-3">
                 <label for="discount" class="col-form-label">Product Discount Price:</label>
                 <div class="form-group">
-                  <input type="text" id="discount" name="discount" class="form-control" placeholder="Product discount Price" />
+                  <input type="number" id="discount" name="discount" onChange={(e) => setData('discount', e.target.value)} class="form-control" placeholder="Product discount Price" />
                 </div>
               </div>
               <div class="col-sm-4 mb-3">
                 <label for="stock_in" class="col-form-label">Product Current Stock :</label>
                 <div class="form-group">
-                  <input type="text" id="stock_in" name="stock_in" class="form-control" placeholder="Product Current Stock" />
+                  <input type="number" id="stock_in" name="stock_in" onChange={(e) => setData('stock_in', e.target.value)} class="form-control" placeholder="Product Current Stock" />
                 </div>
               </div>
             </div>
-
             <div class="row">
-
               <div class="col-sm-12 mb-3">
                 <label for="description" class="col-form-label">Product Description :</label>
                 <div class="form-group">
-                  <textarea class="form-control" id="description" name="description" placeholder="Product Description here" ></textarea>
+                  <textarea class="form-control" id="description" name="description" onChange={(e) => setData('description', e.target.value)} placeholder="Product Description here" ></textarea>
                 </div>
               </div>
             </div>
-
             <div class="row">
 
               <SizeInputs onSizeDataChange={handleSizeDataChange} />
 
             </div>
-
             <div class="row">
               <div class="col-sm-6">
                 <label for="image" class="col-form-label">Product Image :</label>
@@ -140,27 +135,20 @@ const Create = ({ categories, brands }) => {
                   <input class="form-control" type="file" name="image" id="image" onChange="mainImage(this)" />
                   <img src=""
                     alt="Admin" height="100px" id="mainImageShow" />
-
                 </div>
               </div>
-
               <div class="col-sm-6">
                 <label for="image" class="col-form-label">Product Multiple Image :</label>
                 <div class="form-group">
                   <input class="form-control" name="images[]" type="file" id="multiImg" multiple="" />
-
                   <div class="row" id="preview_img"></div>
                 </div>
-
               </div>
             </div>
-
-
             <input type="submit" class="btn btn-primary px-4 submit" value="Add Product" />
           </form>
         </div>
       </div>
-
     </Front>
   );
 };
