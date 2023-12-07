@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignIdFor(FlashSale::class)->nullable();
             $table->string('name');
             $table->string('slug');
-            $table->foreignId('category_id')->constrained('categories');
+            $table->foreignId('category_id')->nullable()->constrained('categories');
             $table->foreignId('subcategory_id')->nullable()->constrained('sub_categories');
             $table->foreignId('brand_id')->nullable()->constrained('brands');
             $table->text('description')->nullable();

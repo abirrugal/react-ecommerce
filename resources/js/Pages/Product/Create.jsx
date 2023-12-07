@@ -9,12 +9,14 @@ const Create = ({ categories, brands }) => {
   const { data, setData, post, errors } = useForm({
     name: '',
     price: '',
+    brand_id:'',
     discount: '',
     sizes: '',
     stock_in: '',
     description: '',
     image: '',
     images: '',
+    category_id: '',
     subcategory_id: ''
   });
   const [subcategories, setSubcategories] = useState([]);
@@ -25,12 +27,53 @@ const Create = ({ categories, brands }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(data);
+    const updatedData = {...data};
+    setData(updatedData);
+    post(base_url+'/admin/product', data);
   };
+
+  const handleImage = (e) => {
+    const image = e.target.files[0];
+    setData('image', image);
+    if (image) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const imageShow = document.getElementById('mainImageShow');
+        if (imageShow) {
+          imageShow.src = event.target.result;
+        }
+      }
+      reader.readAsDataURL(image);
+    }
+  }
+
+  const handleMultipleImage = (e) => {
+    const multipleImages = e.target.files;
+    setData('images', multipleImages);
+
+    const previewImg = document.getElementById('preview_img');
+    previewImg.innerHTML = '';
+
+    if (multipleImages) {
+      Array.from(multipleImages).forEach((image) => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const imgElement = document.createElement('img');
+          imgElement.src = event.target.result;
+          imgElement.alt = 'Preview';
+          imgElement.style.maxWidth = '100px';
+          imgElement.style.marginRight = '10px';
+          previewImg.appendChild(imgElement);
+        };
+        reader.readAsDataURL(image);
+      });
+    }
+  }
 
   const getSubCategory = (e) => {
     setSubcategories([]);
     const categoryId = e.target.value;
+    setData('category_id', categoryId);
     axios.get(base_url + `/admin/category/${categoryId}/subcategories`)
       .then((res) => {
         let subcategoryList = res.data.subcategories;
@@ -79,7 +122,7 @@ const Create = ({ categories, brands }) => {
               </div>
               <div class="col-sm-4 mb-3">
                 <label for="brand_id " class="col-form-label">Brand Name :</label>
-                <select name="brand_id" class="form-select" id="inputProductType">
+                <select name="brand_id" class="form-select" id="inputProductType" onChange={(e)=>setData('brand_id', e.target.value)}>
                   <option>Select Brand</option>
                   {brands.map(({ id, name }) => {
                     return <option value={id}>{name}</option>
@@ -132,7 +175,7 @@ const Create = ({ categories, brands }) => {
               <div class="col-sm-6">
                 <label for="image" class="col-form-label">Product Image :</label>
                 <div class="form-group">
-                  <input class="form-control" type="file" name="image" id="image" onChange="mainImage(this)" />
+                  <input class="form-control" type="file" name="image" id="image" onChange={handleImage} />
                   <img src=""
                     alt="Admin" height="100px" id="mainImageShow" />
                 </div>
@@ -140,7 +183,7 @@ const Create = ({ categories, brands }) => {
               <div class="col-sm-6">
                 <label for="image" class="col-form-label">Product Multiple Image :</label>
                 <div class="form-group">
-                  <input class="form-control" name="images[]" type="file" id="multiImg" multiple="" />
+                  <input class="form-control" name="images" type="file" onChange={handleMultipleImage} id="multiImg" multiple />
                   <div class="row" id="preview_img"></div>
                 </div>
               </div>
