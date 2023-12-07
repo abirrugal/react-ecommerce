@@ -116,15 +116,22 @@ const Sidebar = () => {
                         <div id="productMenu" className="collapse" data-bs-parent="#sideNavbar">
                             <ul className="nav flex-column">
                                 <li className="nav-item">
-                                    <Link className="nav-link has-arrow" href={base_url + '/admin/product'} >
-                                        Add Product
-                                    </Link>
+                                    <li className="nav-item">
+                                        <Link className="nav-link " href={base_url + '/admin/product/create'}>
+                                            Add Product
+                                        </Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-link has-arrow" href={base_url + '/admin/product'} >
+                                            All Product
+                                        </Link>
+                                    </li>
                                 </li>
                             </ul>
                         </div>
                     </li>
 
-                
+
                     {/* Product Variant  */}
 
                     <li className="nav-item">

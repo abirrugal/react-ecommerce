@@ -31,6 +31,7 @@ Route::group(['prefix'=> 'admin'], function(){
         Route::get('/{id}/edit',  'edit')->name('edit');
         Route::put('/{id}',  'update')->name('update');
         Route::delete('/{id}', 'delete')->name('delete');
+        Route::get('/{category}/subcategories', 'getSubCategory');
     });
 
     Route::prefix('subcategory')->controller(SubCategoryController::class)->name('subcategory.')->group(function() {

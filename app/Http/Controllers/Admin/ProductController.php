@@ -29,7 +29,7 @@ class ProductController extends Controller
 
         $categories = Category::latest()->get();
         $brands = Brand::latest()->get();
-        return Inertia::render('Product/Form');
+        return Inertia::render('Product/Create',  ['brands' => $brands, 'categories'=>$categories]);
         // return view('admin.product.create',compact('brands','categories'));
     }
 

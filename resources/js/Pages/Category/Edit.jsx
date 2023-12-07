@@ -3,16 +3,8 @@ import Front from '../../Layouts/Front';
 import { router, usePage } from '@inertiajs/react'
 
 const Edit = ({ category }) => {
-    // if (!errors) {
-    //     errors = {};
-    // }
 
     let { errors } = usePage().props;
-
-    console.log(errors);
-    //     if (!errors) {
-    //     errors = {};
-    // }
 
     const imageRef = useRef('');
     const [values, setValues] = useState({
@@ -69,7 +61,7 @@ const Edit = ({ category }) => {
                             <div className="form-group">
                                 <input type="text" id="name" name="name" onChange={handleChange} value={values.name} className="form-control" placeholder="Name" />
                             </div>
-                            {/* {errors.name && <div className='alert alert-danger'>{errors.name}</div>} */}
+                            {errors.name && <div className='alert alert-danger'>{errors.name}</div>}
                         </div>
 
                         <div className="mb-3">
@@ -77,7 +69,7 @@ const Edit = ({ category }) => {
                             <div className="form-group">
                                 <textarea className="form-control" name="description" onChange={handleChange} value={values.description} placeholder="Description here" id="description" ></textarea>
                             </div>
-                            {/* {errors.description && <div className='alert alert-danger'>{errors.description}</div>} */}
+                            {errors.description && <div className='alert alert-danger'>{errors.description}</div>}
                         </div>
 
                         <div className="mb-3">
@@ -85,7 +77,7 @@ const Edit = ({ category }) => {
                             <div className="form-group">
                                 <input type="file" ref={imageRef} onChange={handleImage} name="image" className="form-control" placeholder="Product image " id="image" />
                             </div>
-                            {/* {errors.image && <div className='alert alert-danger'>{errors.image}</div>} */}
+                            {errors.image && <div className='alert alert-danger'>{errors.image}</div>}
                             <div className="row mb-3">
                                 <div className="col-sm-3">
                                     <h6 className="mb-0"></h6>

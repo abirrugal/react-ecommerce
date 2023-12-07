@@ -29,18 +29,23 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        // $validator = Validator::make($request->all(), [
+        //     'name' => 'required|string',
+        //     'image' => 'required|image|mimes:png,jpg,jpeg',
+        //     'description' => 'required|min:2',
+        //     'status' => 'required'
+        // ]);
+
+        // if ($validator->fails()) {
+        //     return Inertia::render('Category/Create', ['errors' => $validator->errors()->toArray()]);
+        // }
+
+        $input = $request->validate([
             'name' => 'required|string',
             'image' => 'required|image|mimes:png,jpg,jpeg',
             'description' => 'required|min:2',
             'status' => 'required'
         ]);
-
-        if ($validator->fails()) {
-            return Inertia::render('Category/Create', ['errors' => $validator->errors()->toArray()]);
-        }
-
-        $input = $validator->validated();
 
         $image = $request->file('image');
         $name_gen = time() . '.' . $image->getClientOriginalExtension();
@@ -109,5 +114,10 @@ class CategoryController extends Controller
         $category->delete();
 
         return redirect()->route('category.index');
+    }
+
+    public function getSubCategory(Request $request, Category $category)
+    {
+        return response()->json(['subcategories' => $category->subcategories]);
     }
 }

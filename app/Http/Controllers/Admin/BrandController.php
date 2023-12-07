@@ -66,18 +66,13 @@ class BrandController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
+        $inputs = $request->validate([
             'name' => 'required|min:2',
             'description' => 'required|min:2',
             'image' => 'nullable|mimes:png,jpg,jpeg',
             'status' => 'required|boolean'
         ]);
-
-        if ($validator->fails()) {
-            return Inertia::render('Brand/Edit', ['errors' => $validator->errors()->toArray(), 'brand' => []]);
-        }
-
-        $inputs = $validator->validated();
+        
         $brand = Brand::find($id);
 
         if ($request->file('image') && $request->file('image')->isValid()) {

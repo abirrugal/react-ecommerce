@@ -2,9 +2,8 @@ import React, { useRef, useState } from 'react';
 import Front from '../../Layouts/Front';
 import { useForm } from '@inertiajs/react';
 
-const Create = () => {
-
-    const { data, setData, post, processing, errors } = useForm({
+const Create = ({errors}) => {
+    const { data, setData, post, processing } = useForm({
         name: '',
         description: '',
         image: '',

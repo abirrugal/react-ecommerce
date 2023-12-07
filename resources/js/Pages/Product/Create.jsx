@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import SizeInputs from './../../Includes/MultipleInput';
-import Front from './../../Layouts/Front'
+import SizeInputs from '../../Includes/MultipleInput';
+import Front from '../../Layouts/Front'
+import { router } from '@inertiajs/react';
+import axios from 'axios';
 
-const FormComponent = () => {
+const Create = ({ categories, brands }) => {
   const [otherFormData, setOtherFormData] = useState({ name: '' });
+  const [subcategories, setSubcategories] = useState([]);
   const [sizes, setSizes] = useState([
     { attributeName: '', attributeValue: '', additionalPrice: '' },
   ]);
@@ -15,8 +18,20 @@ const FormComponent = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     // Handle form submission, including otherFormData and sizes state
-    console.log(sizes);
+    // console.log(sizes);
   };
+
+  const getSubCategory = (e) => {
+    setSubcategories([]);
+    const categoryId = e.target.value;
+    axios.get(base_url + `/admin/category/${categoryId}/subcategories`)
+      .then((res) => {
+        let subcategoryList = res.data.subcategories;
+        const updatedSubcategories = subcategoryList.map(({ id, name }) => ({ id, name }));
+        setSubcategories(updatedSubcategories);
+        // console.log(subcategories);
+      })
+  }
 
   return (
     <Front title={'Create Product'}>
@@ -43,28 +58,31 @@ const FormComponent = () => {
             <div class="row">
               <div class="col-sm-4 mb-3">
                 <label for="category_id" class="col-form-label">Category Name :</label>
-                <select name="category_id" class="form-select" id="category_id">
-                  <option></option>
-                  {/* @foreach($categories as $category) */}
-                  <option value=""></option>
-                  {/* @endforeach */}
+                <select name="category_id" class="form-select" id="category_id" onChange={getSubCategory}>
+                  <option>Select Category</option>
+                  {categories.map(({ id, name }) => {
+                    return (<option value={id}>{name}</option>)
+                  })}
                 </select>
               </div>
 
               <div class="col-sm-4 mb-3">
                 <label for="subcategory_id" class="col-form-label">Sub Category Name :</label>
                 <select name="subcategory_id" class="form-select" id="subcategory_id">
-                  <option></option>
-
+                  <option>Select Sub Category</option>
+                  {subcategories.map(({id,name})=>{
+                    return (<option value={id}>{name}</option>)
+                  })}
+                  
                 </select>
               </div>
               <div class="col-sm-4 mb-3">
                 <label for="brand_id " class="col-form-label">Brand Name :</label>
                 <select name="brand_id" class="form-select" id="inputProductType">
-                  <option></option>
-                  {/* @foreach($brands as $brand) */}
-                  <option value=""></option>
-                  {/* @endforeach */}
+                  <option>Select Brand</option>
+                  {brands.map(({ id, name }) => {
+                    return <option value={id}>{name}</option>
+                  })}
                 </select>
               </div>
             </div>
@@ -111,7 +129,7 @@ const FormComponent = () => {
 
             <div class="row">
 
-            <SizeInputs onSizeDataChange={handleSizeDataChange} />
+              <SizeInputs onSizeDataChange={handleSizeDataChange} />
 
             </div>
 
@@ -121,7 +139,7 @@ const FormComponent = () => {
                 <div class="form-group">
                   <input class="form-control" type="file" name="image" id="image" onChange="mainImage(this)" />
                   <img src=""
-                    alt="Admin"  height="100px" id="mainImageShow" />
+                    alt="Admin" height="100px" id="mainImageShow" />
 
                 </div>
               </div>
@@ -147,4 +165,4 @@ const FormComponent = () => {
   );
 };
 
-export default FormComponent;
+export default Create;
