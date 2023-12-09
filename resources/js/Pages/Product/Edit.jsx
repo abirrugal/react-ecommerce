@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import SizeInputs from '../../Includes/MultipleInput';
 import Front from '../../Layouts/Front'
 import axios from 'axios';
 import { useForm } from '@inertiajs/react';
 import { Link } from '@inertiajs/react';
+import { router } from '@inertiajs/react';
 
 const Create = ({ categories, brands, variants, product }) => {
+    const imageRef = useRef('');
     const { data, setData, post, errors } = useForm({
         name: product.name,
         price: product.price,
@@ -53,28 +55,62 @@ const Create = ({ categories, brands, variants, product }) => {
     }
 
     const handleMultipleImage = (e) => {
-        const multipleImages = e.target.files;
-        setData('images', multipleImages);
+        e.stopPropagation()
 
-        const previewImg = document.getElementById('preview_img');
-        previewImg.innerHTML = '';
-
-        if (multipleImages) {
-            Array.from(multipleImages).forEach((image) => {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    const imgElement = document.createElement('img');
-                    imgElement.src = event.target.result;
-                    imgElement.alt = 'Preview';
-                    imgElement.style.maxWidth = '120px';
-                    imgElement.style.marginRight = '1px';
-                    previewImg.appendChild(imgElement);
-                };
-                reader.readAsDataURL(image);
-            });
+        const image = e.target.files[0];
+        // setData('image', image);
+        if (image) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const imageShow = document.getElementById('multiImagePreview');
+                if (imageShow) {
+                    imageShow.src = event.target.result;
+                }
+            }
+            reader.readAsDataURL(image);
         }
 
-        
+
+        // const multipleImages = e.target.files;
+        // setData('images', multipleImages);
+
+        // const previewImg = document.getElementById('preview_img');
+        // previewImg.innerHTML = '';
+
+        // const image = e.target.files[0];
+        // router.post(base_url + `/admin/product/${product.id}/addimage`, { 'image': image });
+        // if (image) {
+        //     const reader = new FileReader();
+        //     reader.onload = (event) => {
+        //         const imageShow = document.getElementById('mainImageShow');
+        //         if (imageShow) {
+        //             imageShow.src = event.target.result;
+        //         }
+        //     }
+        //     reader.readAsDataURL(image);
+        // }
+
+        //     if (multipleImages) {
+        //         Array.from(multipleImages).forEach((image) => {
+        //             const reader = new FileReader();
+        //             reader.onload = (event) => {
+        //                 const imgElement = document.createElement('img');
+        //                 imgElement.src = event.target.result;
+        //                 imgElement.alt = 'Preview';
+        //                 imgElement.style.maxWidth = '120px';
+        //                 imgElement.style.marginRight = '1px';
+        //                 previewImg.appendChild(imgElement);
+        //             };
+        //             reader.readAsDataURL(image);
+        //         });
+        // }
+
+
+    }
+
+    const mulipleImageUpload = (e) => {
+        const image = imageRef.current.files[0];
+        router.post(base_url + `/admin/product/${product.id}/addimage`, { 'image': image });
     }
 
     const handleCategoryChange = (e) => {
@@ -199,39 +235,46 @@ const Create = ({ categories, brands, variants, product }) => {
                                         alt="Admin" height="100px" id="mainImageShow" className='my-2' />}
                                 </div>
                             </div>
+                            <input type="submit" class="btn btn-primary px-4 submit my-4" value="Update Product" />
 
                             <hr />
 
-
-                            <label for="image" class="col-form-label">Galary Images :</label>
-                            {product.images && (product.images.map(({ id, image }) => {
-                                return (<div class="col-sm-2">
-                                    <div class="card" style={{ width: '12rem' }}>
-                                        <img class="card-img-top" src={base_url + '/' + image} alt="Card image cap" />
-                                        <div class="card-body">
-                                            {/* <h5 class="card-title">{image}</h5> */}
-                                            <Link href={base_url + `/admin/product/images/${id}/delete`} class="btn btn-primary">Remove</Link>
-                                        </div>
-                                    </div>
-                                </div>)
-                            }))
-                            }
-
-                            <div class="col-sm-6 mt-3">
-                                <label for="image" class="col-form-label">Add More Image :</label>
-                                <div class="form-group">
-                                    <input class="form-control" name="images" type="file" onChange={handleMultipleImage} id="multiImg" multiple />
-                                    <div class="row justify-content-center align-items-center flex-wrap p-3" id="preview_img"></div>
-                                </div>
-                            </div>
-
-
                         </div>
-                        <input type="submit" class="btn btn-primary px-4 submit my-4" value="Update Product" />
                     </form>
                 </div>
+
+                <div className='row clearfix bg-white p-5 my-5'>
+                    <h4 className='text-center mt-3'>Gallery Images</h4>
+
+                    <div class="col-10 mt-3">
+                        <label for="image" class="col-form-label">Add More Image :</label>
+                        <div class="input-group">
+                            <input type="file" class="form-control" ref={imageRef} onChange={handleMultipleImage} placeholder="Upload" aria-label="Recipient's username" aria-describedby="basic-addon2" />
+                            <div class="input-group-append">
+                                <button class="btn btn-info btn-sm text-white" onClick={mulipleImageUpload} type="button">Add</button>
+                            </div>
+                        </div>
+                        <img src='' id='multiImagePreview' className='mt-3' width='150px' />
+                    </div>
+
+                    <div class="row">
+                        <div class="col-form-label">Galary Images :</div>
+                        {product.images && (product.images.map(({ id, image }) => {
+                            return (<div class="col-sm-2">
+                                <div class="card" style={{ width: '12rem' }}>
+                                    <img class="card-img-top" src={base_url + '/' + image} alt="Card image cap" />
+                                    <div class="card-body text-center">
+                                        {/* <h5 class="card-title">{image}</h5> */}
+                                        <Link href={base_url + `/admin/product/images/${id}/delete`} class="btn btn-outline-danger">Remove</Link>
+                                    </div>
+                                </div>
+                            </div>)
+                        }))
+                        }
+                    </div>
+                </div>
             </div>
-        </Front>
+        </Front >
     );
 };
 
