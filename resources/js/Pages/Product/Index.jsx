@@ -7,7 +7,7 @@ import { Link } from '@inertiajs/react'
 function Index({products}) {
    
   return (
-    <Front>
+    <Front title="Product List">
         <div className="card my-3">
         <div className="card-header d-flex justify-content-between align-items-center">
             <h4>Products</h4>

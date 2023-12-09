@@ -83,7 +83,7 @@ const Create = ({ categories, brands, variants }) => {
   }
 
   return (
-    <Front title={'Create Product'}>
+    <Front title='Create Product'>
       <div class="container">
         <div class="block-header mt-5">
           <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">

@@ -72,7 +72,7 @@ class ProductController extends Controller
         }
 
         foreach ($request->images as $key => $image) {
-            $name_gen = time() . '.' . $image->getClientOriginalExtension();
+            $name_gen = uniqid() . '.' . $image->getClientOriginalExtension();
             $save_url = 'images/products/gallery/' . $name_gen;
             $image->move(public_path('images/products/gallery'), $name_gen);
             $image = $save_url;
@@ -155,7 +155,7 @@ class ProductController extends Controller
             }
 
             // foreach ($request->images as $key => $image) {
-            //     $name_gen = time() . '.' . $image->getClientOriginalExtension();
+            //     $name_gen = uniqid() . '.' . $image->getClientOriginalExtension();
             //     $save_url = 'images/products/gallery/' . $name_gen;
             //     $image->move(public_path('images/products/gallery'), $name_gen);
             //     $image = $save_url;
@@ -218,8 +218,32 @@ class ProductController extends Controller
 
     public function productAllInactive()
     {
-
         $products = Product::where('status', '0')->latest()->paginate(15);
         return view('admin.product.inactive', compact('products'));
+    }
+
+    public function addImage(Request $request, $id)
+    {
+        $product = Product::find($id);
+        $image = $request->file('image');
+        if ($product && $image && $image->isValid()) {
+            $name_gen = uniqid() . '.' . $image->getClientOriginalExtension();
+            $save_url = 'images/products/gallery/' . $name_gen;
+            $image->move(public_path('images/products/gallery'), $name_gen);
+            $image = $save_url;
+            $product->images()->create(['image'=>$save_url]);
+        }
+        return redirect()->back();
+    }
+
+    public function deleteImage($id)
+    {
+        $image = ProductImage::find($id);
+        if (file_exists($image->image)) {
+            unlink($image->image);
+        }
+        $image->delete();
+
+        return redirect()->back();
     }
 }

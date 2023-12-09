@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import SizeInputs from '../../Includes/MultipleInput';
 import Front from '../../Layouts/Front'
 import axios from 'axios';
-import { useForm } from '@inertiajs/react'
+import { useForm } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 
 const Create = ({ categories, brands, variants, product }) => {
     const { data, setData, post, errors } = useForm({
@@ -14,7 +15,7 @@ const Create = ({ categories, brands, variants, product }) => {
         description: product.description,
         category_id: product.category_id,
         subcategory_id: product.subcategory_id,
-        _method:'PUT'
+        _method: 'PUT',
     });
     const [subcategories, setSubcategories] = useState([]);
 
@@ -33,7 +34,7 @@ const Create = ({ categories, brands, variants, product }) => {
         event.preventDefault();
         const updatedData = { ...data };
         setData(updatedData);
-        post(base_url + '/admin/product/'+product.id, data);
+        post(base_url + '/admin/product/' + product.id, data);
     };
 
     const handleImage = (e) => {
@@ -51,33 +52,35 @@ const Create = ({ categories, brands, variants, product }) => {
         }
     }
 
-    // const handleMultipleImage = (e) => {
-    //     const multipleImages = e.target.files;
-    //     setData('images', multipleImages);
+    const handleMultipleImage = (e) => {
+        const multipleImages = e.target.files;
+        setData('images', multipleImages);
 
-    //     const previewImg = document.getElementById('preview_img');
-    //     previewImg.innerHTML = '';
+        const previewImg = document.getElementById('preview_img');
+        previewImg.innerHTML = '';
 
-    //     if (multipleImages) {
-    //         Array.from(multipleImages).forEach((image) => {
-    //             const reader = new FileReader();
-    //             reader.onload = (event) => {
-    //                 const imgElement = document.createElement('img');
-    //                 imgElement.src = event.target.result;
-    //                 imgElement.alt = 'Preview';
-    //                 imgElement.style.maxWidth = '120px';
-    //                 imgElement.style.marginRight = '1px';
-    //                 previewImg.appendChild(imgElement);
-    //             };
-    //             reader.readAsDataURL(image);
-    //         });
-    //     }
-    // }
+        if (multipleImages) {
+            Array.from(multipleImages).forEach((image) => {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = event.target.result;
+                    imgElement.alt = 'Preview';
+                    imgElement.style.maxWidth = '120px';
+                    imgElement.style.marginRight = '1px';
+                    previewImg.appendChild(imgElement);
+                };
+                reader.readAsDataURL(image);
+            });
+        }
+
+        
+    }
 
     const handleCategoryChange = (e) => {
         const categoryId = e.target.value;
         setData('category_id', categoryId);
-      };
+    };
 
     useEffect(() => {
         if (data.category_id) {
@@ -98,7 +101,7 @@ const Create = ({ categories, brands, variants, product }) => {
     }, [data.category_id, product.subcategory_id]);
 
     return (
-        <Front title={'Create Product'}>
+        <Front title="Update Product">
             <div class="container">
                 <div class="block-header mt-5">
                     <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
@@ -192,20 +195,39 @@ const Create = ({ categories, brands, variants, product }) => {
                                 <div class="form-group">
                                     <input class="form-control" type="file" name="image" id="image" onChange={handleImage} />
 
-                                    {data.image && <img src=""
-                                        alt="Admin" height="100px" id="mainImageShow" className='mt-2' />}
-
+                                    {product.image && <img src={base_url + '/' + product.image}
+                                        alt="Admin" height="100px" id="mainImageShow" className='my-2' />}
                                 </div>
                             </div>
-                            {/* <div class="col-sm-6">
-                                <label for="image" class="col-form-label">Product Multiple Image :</label>
+
+                            <hr />
+
+
+                            <label for="image" class="col-form-label">Galary Images :</label>
+                            {product.images && (product.images.map(({ id, image }) => {
+                                return (<div class="col-sm-2">
+                                    <div class="card" style={{ width: '12rem' }}>
+                                        <img class="card-img-top" src={base_url + '/' + image} alt="Card image cap" />
+                                        <div class="card-body">
+                                            {/* <h5 class="card-title">{image}</h5> */}
+                                            <Link href={base_url + `/admin/product/images/${id}/delete`} class="btn btn-primary">Remove</Link>
+                                        </div>
+                                    </div>
+                                </div>)
+                            }))
+                            }
+
+                            <div class="col-sm-6 mt-3">
+                                <label for="image" class="col-form-label">Add More Image :</label>
                                 <div class="form-group">
                                     <input class="form-control" name="images" type="file" onChange={handleMultipleImage} id="multiImg" multiple />
                                     <div class="row justify-content-center align-items-center flex-wrap p-3" id="preview_img"></div>
                                 </div>
-                            </div> */}
+                            </div>
+
+
                         </div>
-                        <input type="submit" class="btn btn-primary px-4 submit" value="Edit Product" />
+                        <input type="submit" class="btn btn-primary px-4 submit my-4" value="Update Product" />
                     </form>
                 </div>
             </div>
