@@ -146,7 +146,7 @@ const Create = ({ categories, brands, variants }) => {
                 </div>
               </div>
               <div class="col-sm-4 mb-3">
-                <label for="discount" class="col-form-label">Product Discount Price:</label>
+                <label for="discount" class="col-form-label">Product Discount (Ex: 5 for 5% discount):</label>
                 <div class="form-group">
                   <input type="number" id="discount" name="discount" onChange={(e) => setData('discount', e.target.value)} class="form-control" placeholder="Product discount Price" />
                 </div>

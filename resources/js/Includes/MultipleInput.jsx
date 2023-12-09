@@ -69,7 +69,7 @@ const MultipleInput = ({ onSizeDataChange, variants }) => {
         </tbody>
       </table>
       <button type="button" className='btn btn-primary remove-table-row mt-2' onClick={handleAddSize}>
-        Add Size
+        Add
       </button>
     </div>
   );
