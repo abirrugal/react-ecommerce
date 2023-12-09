@@ -225,15 +225,26 @@ class ProductController extends Controller
     public function addImage(Request $request, $id)
     {
         $product = Product::find($id);
-        $image = $request->file('image');
-        if ($product && $image && $image->isValid()) {
+        // $image = $request->file('image');
+        // if ($product && $image && $image->isValid()) {
+        //     $name_gen = uniqid() . '.' . $image->getClientOriginalExtension();
+        //     $save_url = 'images/products/gallery/' . $name_gen;
+        //     $image->move(public_path('images/products/gallery'), $name_gen);
+        //     $image = $save_url;
+        //     $product->images()->create(['image'=>$save_url]);
+        // }
+        // return redirect()->back();
+
+        foreach ($request->images as $key => $image) {
             $name_gen = uniqid() . '.' . $image->getClientOriginalExtension();
             $save_url = 'images/products/gallery/' . $name_gen;
             $image->move(public_path('images/products/gallery'), $name_gen);
             $image = $save_url;
-            $product->images()->create(['image'=>$save_url]);
+
+            $product->images()->create(['image' => $image]);
+            
+            return redirect()->back();
         }
-        return redirect()->back();
     }
 
     public function deleteImage($id)
