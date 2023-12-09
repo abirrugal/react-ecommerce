@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Attribute;
+use App\Models\Variant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
@@ -14,7 +14,7 @@ class AttributeController extends Controller
      */
     public function index(Request $request)
     {
-        $variants = Attribute::query();
+        $variants = Variant::query();
         if($request->search){
             $variants = $variants->where('name', 'LIKE', "%{$request->search}%");
         }
@@ -46,7 +46,7 @@ class AttributeController extends Controller
        }
 
        $inputs = $request->all();
-       Attribute::create($inputs);
+       Variant::create($inputs);
 
        return to_route('attribute.index');
     }
@@ -54,7 +54,7 @@ class AttributeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Attribute $attribute)
+    public function show(Variant $attribute)
     {
         //
     }
@@ -64,7 +64,7 @@ class AttributeController extends Controller
      */
     public function edit($id)
     {
-        $variant = Attribute::find($id);
+        $variant = Variant::find($id);
         return Inertia::render('Product/Attribute/Edit', ['variant' => $variant, 'errors'=>[]]);
     }
 
@@ -82,7 +82,7 @@ class AttributeController extends Controller
            return Inertia::render('Product/Attribute/Edit', ['errors'=>$validation->errors()->toArray()]);
           }
 
-          $attribute = Attribute::find($id);
+          $attribute = Variant::find($id);
           $attribute->update($validation->validated());
    
           return to_route('attribute.index');
@@ -93,7 +93,7 @@ class AttributeController extends Controller
      */
     public function delete($id)
     {
-         Attribute::find($id)->delete();
+         Variant::find($id)->delete();
 
         return to_route('attribute.index');
     }

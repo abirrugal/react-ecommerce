@@ -1,26 +1,27 @@
 import React, { useState } from 'react';
 
-const MultipleInput = ({ onSizeDataChange }) => {
-  const [sizes, setSizes] = useState([
+const MultipleInput = ({ onSizeDataChange, variants }) => {
+  const [productVariant, setVariant] = useState([
     { attributeName: '', attributeValue: '', additionalPrice: '' },
   ]);
+  // console.log(variants);
 
   const handleAddSize = () => {
-    setSizes([...sizes, { attributeName: '', attributeValue: '', additionalPrice: '' }]);
+    setVariant([...productVariant, { attributeName: '', attributeValue: '', additionalPrice: '' }]);
   };
 
   const handleRemoveSize = (index) => {
-    const updatedSizes = [...sizes];
+    const updatedSizes = [...productVariant];
     updatedSizes.splice(index, 1);
-    setSizes(updatedSizes);
+    setVariant(updatedSizes);
     onSizeDataChange(updatedSizes); // Send updated sizes data to parent
   };
 
   const handleInputChange = (index, event) => {
     const { name, value } = event.target;
-    const updatedSizes = [...sizes];
+    const updatedSizes = [...productVariant];
     updatedSizes[index][name] = value;
-    setSizes(updatedSizes);
+    setVariant(updatedSizes);
     onSizeDataChange(updatedSizes); // Send updated sizes data to parent
   };
 
@@ -28,35 +29,26 @@ const MultipleInput = ({ onSizeDataChange }) => {
     <div>
       <table>
         <tbody>
-          {sizes.map((size, index) => (
+          {productVariant.map((variant, index) => (
             <tr key={index}>
               <td>
-                <select
-                  name="attributeName"
-                  className="form-select"
-                  value={size.attributeName}
-                  onChange={(e) => handleInputChange(index, e)}
-                >
-                  <option value="">Select Color</option>
-                  <option value="White">White</option>
-                  <option value="Black">Black</option>
-                  <option value="Blue">Blue</option>
-                  <option value="Green">Green</option>
+                <select name="attributeName" value={variant.attributeName} class="form-select" id="category_id" onChange={(e) => handleInputChange(index, e)}>
+                  <option>Select Variant</option>
+                  {variants.map(({ name }) => {
+                    return (<option value={name.toLowerCase()}>{name}</option>)
+                  })}
                 </select>
               </td>
+
               <td>
-                <select
+                <input
+                  type="text"
                   name="attributeValue"
-                  className="form-select"
-                  value={size.attributeValue}
+                  className="form-control"
+                  placeholder="Variant Value Ex:(red, XL)"
+                  value={variant.attributeValue}
                   onChange={(e) => handleInputChange(index, e)}
-                >
-                  <option value="">Select Size</option>
-                  <option value="S">S</option>
-                  <option value="M">M</option>
-                  <option value="L">L</option>
-                  <option value="XL">XL</option>
-                </select>
+                />
               </td>
               <td>
                 <input
@@ -64,13 +56,13 @@ const MultipleInput = ({ onSizeDataChange }) => {
                   name="additionalPrice"
                   className="form-control"
                   placeholder="Additional Price"
-                  value={size.additionalPrice}
+                  value={variant.additionalPrice}
                   onChange={(e) => handleInputChange(index, e)}
                 />
               </td>
               <td>
 
-              <button type="button" className="btn btn-danger remove-table-row" onClick={() => handleRemoveSize(index)}>Remove</button>
+                <button type="button" className="btn btn-danger remove-table-row" onClick={() => handleRemoveSize(index)}>Remove</button>
               </td>
             </tr>
           ))}

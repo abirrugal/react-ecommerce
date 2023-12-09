@@ -5,13 +5,13 @@ import { router } from '@inertiajs/react';
 import axios from 'axios';
 import { useForm } from '@inertiajs/react'
 
-const Create = ({ categories, brands, variants }) => {
+const Create = ({ categories, brands, product }) => {
   const { data, setData, post, errors } = useForm({
-    name: '',
-    price: '',
+    name: product.name,
+    price: product.price,
     brand_id: '',
     discount: '',
-    variant: '',
+    sizes: '',
     stock_in: '',
     description: '',
     image: '',
@@ -21,8 +21,8 @@ const Create = ({ categories, brands, variants }) => {
   });
   const [subcategories, setSubcategories] = useState([]);
 
-  const handleSizeDataChange = (updatedVariant) => {
-    setData('variant', updatedVariant);
+  const handleSizeDataChange = (updatedSizes) => {
+    setData('sizes', updatedSizes);
   };
 
   const handleSubmit = (event) => {
@@ -168,7 +168,7 @@ const Create = ({ categories, brands, variants }) => {
             </div>
             <div class="row">
 
-              <SizeInputs onSizeDataChange={handleSizeDataChange} variants={variants} />
+              <SizeInputs onSizeDataChange={handleSizeDataChange} />
 
             </div>
             <div class="row">

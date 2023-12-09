@@ -10,13 +10,13 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Brand;
+use App\Models\Variant;
 use Inertia\Inertia;
 
 class ProductController extends Controller
 {
     public function index(Request $request)
     {
-
         $products = Product::query();
         if ($request->search) {
             $products = $products->where('name', 'LIKE', "%{$request->search}%");
@@ -26,16 +26,14 @@ class ProductController extends Controller
         return Inertia::render('Product/Index', ['products' => $products]);
     }
 
-
     public function create()
     {
-
         $categories = Category::latest()->get();
         $brands = Brand::latest()->get();
-        return Inertia::render('Product/Create',  ['brands' => $brands, 'categories' => $categories]);
+        $variants = Variant::latest('name')->get();
+        return Inertia::render('Product/Create',  ['brands' => $brands, 'categories' => $categories, 'variants' => $variants]);
         // return view('admin.product.create',compact('brands','categories'));
     }
-
 
     public function store(Request $request)
     {
@@ -45,7 +43,7 @@ class ProductController extends Controller
             'subcategory_id' => 'required|numeric|exists:sub_categories,id',
             'brand_id' => 'nullable|numeric|exists:brands,id',
             'description' => 'required|min:2|string',
-            'sizes' => 'required',
+            'variant' => 'required',
             'price' => 'required|numeric',
             'stock_in' => 'required|numeric',
             'discount' => 'required|numeric',
@@ -63,9 +61,9 @@ class ProductController extends Controller
         }
         $inputs['slug'] = strtolower(str_replace(' ', '-', $request->name));
         $product = Product::create($inputs);
-        $sizes = $request->sizes;
+        $variants = $request->variant;
 
-        foreach ($sizes as $key => $value) {
+        foreach ($variants as $key => $value) {
             $product->variants()->create([
                 'name' => $value['attributeName'],
                 'value' => $value['attributeValue'],
@@ -91,7 +89,7 @@ class ProductController extends Controller
         $brands = Brand::latest()->get();
         $categories = Category::latest()->get();
         $subcategories = SubCategory::latest()->get();
-        $product = Product::findOrFail($id);
+        $product = Product::findOrFail($id)->with(['category','subcategory','brand', 'images', 'variants']);
 
         return view('admin.product.edit', compact('images', 'brands', 'categories', 'subcategories', 'product'));
     }
