@@ -85,13 +85,14 @@ class ProductController extends Controller
 
     public function edit($id)
     {
-        $images = ProductImage::where('product_id', $id)->get();
         $brands = Brand::latest()->get();
         $categories = Category::latest()->get();
         $subcategories = SubCategory::latest()->get();
-        $product = Product::findOrFail($id)->with(['category','subcategory','brand', 'images', 'variants']);
+        $variants = Variant::latest('name')->get();
+        $product = Product::with(['category', 'subcategory', 'brand', 'images', 'variants'])->findOrFail($id);
 
-        return view('admin.product.edit', compact('images', 'brands', 'categories', 'subcategories', 'product'));
+        return Inertia::render('Product/Edit', ['product' => $product, 'categories' => $categories, 'subcategories' => $subcategories, 'brands' => $brands, 'variants' => $variants]);
+        // return view('admin.product.edit', compact('images', 'brands', 'categories', 'subcategories', 'product'));
     }
 
     public function show(Product $product)
@@ -109,64 +110,61 @@ class ProductController extends Controller
     }
 
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
+        $inputs =  $request->validate([
+            'name' => 'required|min:2',
+            'category_id' => 'nullable|numeric|exists:categories,id',
+            'subcategory_id' => 'required|numeric|exists:sub_categories,id',
+            'brand_id' => 'nullable|numeric|exists:brands,id',
+            'description' => 'required|min:2|string',
+            'variant' => 'nullable',
+            'price' => 'required|numeric',
+            'stock_in' => 'required|numeric',
+            'discount' => 'required|numeric',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:3048',
+            // 'images' => 'required',
+        ]);
 
-        $cat_id = $request->id;
-        $old_img = $request->old_image;
+        $product = Product::find($id);
 
-        if ($request->file('image')) {
-
+        if ($product) {
             $image = $request->file('image');
-            $name_gen = time() . '.' . $image->getClientOriginalExtension();
-            $save_url = 'images/products/' . $name_gen;
 
-            $image->move(public_path('images/products'), $name_gen);
-
-            if (file_exists($old_img)) {
-                unlink($old_img);
+            if ($image) {
+                if (file_exists($product->image)) {
+                    unlink($product->image);
+                }
+                $name_gen = time() . '.' . $image->getClientOriginalExtension();
+                $save_url = 'images/products/' . $name_gen;
+                $image->move(public_path('images/products'), $name_gen);
+                $inputs['image'] = $save_url;
+            }
+            // $inputs['slug'] = strtolower(str_replace(' ', '-', $request->name));
+            $product = $product->update($inputs);
+            $variants = $request->variant;
+            if ($variants) {
+                $product->variants()->delete();
+                foreach ($variants as $key => $value) {
+                    $product->variants()->create([
+                        'name' => $value['attributeName'],
+                        'value' => $value['attributeValue'],
+                        'additional_price' => $value['additionalPrice']
+                    ]);
+                }
             }
 
-            Product::findOrFail($cat_id)->update([
-                'name' => $request->name,
-                'slug' => strtolower(str_replace(' ', '-', $request->name)),
-                'category_id' => $request->category_id,
-                'subcategory_id' => $request->subcategory_id,
-                'brand_id' => $request->brand_id,
-                'description' => $request->description,
-                'price' => $request->price,
-                'stock_in' => $request->stock_in,
-                'discount' => $request->discount,
-                'image' => $save_url,
-            ]);
+            // foreach ($request->images as $key => $image) {
+            //     $name_gen = time() . '.' . $image->getClientOriginalExtension();
+            //     $save_url = 'images/products/gallery/' . $name_gen;
+            //     $image->move(public_path('images/products/gallery'), $name_gen);
+            //     $image = $save_url;
 
-            $notification = array(
-                'message' => 'Product Update Successfully',
-                'alert-type' => 'success'
-            );
-
-            return redirect()->route('product')->with($notification);
-        } else {
-
-            Product::findOrFail($cat_id)->update([
-                'name' => $request->name,
-                'slug' => strtolower(str_replace(' ', '-', $request->name)),
-                'category_id' => $request->category_id,
-                'subcategory_id' => $request->subcategory_id,
-                'brand_id' => $request->brand_id,
-                'description' => $request->description,
-                'price' => $request->price,
-                'stock_in' => $request->stock_in,
-                'discount' => $request->discount,
-            ]);
-
-            $notification = array(
-                'message' => 'Product Update Successfully',
-                'alert-type' => 'success'
-            );
-
-            return redirect()->route('product')->with($notification);
+            //     $product->images()->create(['image' => $image]);
+            // }
         }
+
+        return redirect()->route('product.index');
     }
 
     public function multiImageUpdate(Request $request)
