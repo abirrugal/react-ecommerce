@@ -141,7 +141,7 @@ class ProductController extends Controller
                 $inputs['image'] = $save_url;
             }
             // $inputs['slug'] = strtolower(str_replace(' ', '-', $request->name));
-            $product = $product->update($inputs);
+            $product->update($inputs);
             $variants = $request->variant;
             if ($variants) {
                 $product->variants()->delete();

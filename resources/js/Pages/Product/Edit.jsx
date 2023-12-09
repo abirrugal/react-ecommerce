@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import SizeInputs from '../../Includes/MultipleInput';
 import Front from '../../Layouts/Front'
-import { router } from '@inertiajs/react';
 import axios from 'axios';
 import { useForm } from '@inertiajs/react'
 
@@ -11,11 +10,11 @@ const Create = ({ categories, brands, variants, product }) => {
         price: product.price,
         brand_id: product.brand.id,
         discount: product.discount,
-        // variant: '',
         stock_in: product.stock_in,
         description: product.description,
         category_id: product.category_id,
-        subcategory_id: product.subcategory_id
+        subcategory_id: product.subcategory_id,
+        _method:'PUT'
     });
     const [subcategories, setSubcategories] = useState([]);
 
@@ -34,7 +33,7 @@ const Create = ({ categories, brands, variants, product }) => {
         event.preventDefault();
         const updatedData = { ...data };
         setData(updatedData);
-        post(base_url + '/admin/product', data);
+        post(base_url + '/admin/product/'+product.id, data);
     };
 
     const handleImage = (e) => {
