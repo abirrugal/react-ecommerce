@@ -30,7 +30,7 @@ return new class extends Migration
             $table->integer('stock_out')->default(0);
             $table->integer('discount')->nullable();
             $table->string('image');
-            $table->tinyInteger('status')->default(1);
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

@@ -21,7 +21,7 @@ class ProductController extends Controller
         if ($request->search) {
             $products = $products->where('name', 'LIKE', "%{$request->search}%");
         }
-        $products = $products->where('status', '1')->latest()->paginate(15);
+        $products = $products->latest()->paginate(15);
 
         return Inertia::render('Product/Index', ['products' => $products]);
     }
@@ -49,6 +49,7 @@ class ProductController extends Controller
             'discount' => 'required|numeric',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:3048',
             'images' => 'required',
+            'status' => 'required'
         ]);
 
         $image = $request->file('image');
@@ -123,6 +124,7 @@ class ProductController extends Controller
             'stock_in' => 'required|numeric',
             'discount' => 'required|numeric',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:3048',
+            'status' => 'required'
             // 'images' => 'required',
         ]);
 
@@ -225,15 +227,6 @@ class ProductController extends Controller
     public function addImage(Request $request, $id)
     {
         $product = Product::find($id);
-        // $image = $request->file('image');
-        // if ($product && $image && $image->isValid()) {
-        //     $name_gen = uniqid() . '.' . $image->getClientOriginalExtension();
-        //     $save_url = 'images/products/gallery/' . $name_gen;
-        //     $image->move(public_path('images/products/gallery'), $name_gen);
-        //     $image = $save_url;
-        //     $product->images()->create(['image'=>$save_url]);
-        // }
-        // return redirect()->back();
 
         foreach ($request->images as $key => $image) {
             $name_gen = uniqid() . '.' . $image->getClientOriginalExtension();
@@ -242,9 +235,9 @@ class ProductController extends Controller
             $image = $save_url;
 
             $product->images()->create(['image' => $image]);
-            
-            return redirect()->back();
         }
+
+        return redirect()->back();
     }
 
     public function deleteImage($id)

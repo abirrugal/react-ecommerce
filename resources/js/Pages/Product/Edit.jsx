@@ -10,6 +10,7 @@ const Create = ({ categories, brands, variants, product }) => {
   const imageRef = useRef('');
   const { data, setData, post, errors } = useForm({
     name: product.name,
+    status: product.status,
     price: product.price,
     brand_id: product.brand?.id || null,
     discount: product.discount,
@@ -76,8 +77,6 @@ const Create = ({ categories, brands, variants, product }) => {
         reader.readAsDataURL(image);
       });
     }
-
-
   }
 
   const mulipleImageUpload = (e) => {
@@ -208,6 +207,10 @@ const Create = ({ categories, brands, variants, product }) => {
                     alt="Admin" height="100px" id="mainImageShow" className='my-2' />}
                 </div>
               </div>
+              <div className="form-check form-switch my-3">
+                <input className="form-check-input" name='status' onChange={e => setData('status', e.target.checked)} type="checkbox" id="status" checked={data.status} />
+                <label className="form-check-label" htmlForfor="status">Status</label>
+              </div>
               <input type="submit" class="btn btn-primary px-4 submit my-4" value="Update Product" />
 
               <hr />
@@ -232,10 +235,10 @@ const Create = ({ categories, brands, variants, product }) => {
           </div>
 
           <div class="row d-flex flex-wrap">
-            <div>Galary Images :</div>
+            <div className='my-3'>Galary Images :</div>
             {product.images && (product.images.map(({ id, image }) => {
               return (<div class="col-3">
-                <div class="card" style={{ width: '12rem' }}>
+                <div class="card mt-3" style={{ width: '12rem' }}>
                   <img class="card-img-top mr-3" src={base_url + '/' + image} alt="Card image cap" />
                   <div class="card-body text-center">
                     {/* <h5 class="card-title">{image}</h5> */}

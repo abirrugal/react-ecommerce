@@ -9,6 +9,7 @@ const Create = ({ categories, brands, variants }) => {
   const { data, setData, post, errors } = useForm({
     name: '',
     price: '',
+    status:true,
     brand_id: '',
     discount: '',
     variant: '',
@@ -189,6 +190,11 @@ const Create = ({ categories, brands, variants }) => {
                   <div class="row justify-content-center align-items-center flex-wrap p-3" id="preview_img"></div>
                 </div>
               </div>
+            </div>
+
+            <div className="form-check form-switch my-3">
+              <input className="form-check-input" name='status' onChange={e => setData('status', e.target.checked)} type="checkbox" id="status" checked={data.status} />
+              <label className="form-check-label" htmlForfor="status">Status</label>
             </div>
             <input type="submit" class="btn btn-primary px-4 submit" value="Add Product" />
           </form>
