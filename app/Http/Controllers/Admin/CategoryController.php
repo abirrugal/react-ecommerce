@@ -29,17 +29,6 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        // $validator = Validator::make($request->all(), [
-        //     'name' => 'required|string',
-        //     'image' => 'required|image|mimes:png,jpg,jpeg',
-        //     'description' => 'required|min:2',
-        //     'status' => 'required'
-        // ]);
-
-        // if ($validator->fails()) {
-        //     return Inertia::render('Category/Create', ['errors' => $validator->errors()->toArray()]);
-        // }
-
         $input = $request->validate([
             'name' => 'required|string',
             'image' => 'required|image|mimes:png,jpg,jpeg',
@@ -53,21 +42,17 @@ class CategoryController extends Controller
         $image->move(public_path('images/categories'), $name_gen);
         $input['image'] = $save_url;
         $input['slug'] = strtolower(str_replace(' ', '-', $request->name));
-
         Category::create($input);
 
         return to_route('category.index');
     }
 
-
     public function edit($id)
     {
-
         $category = Category::findOrFail($id);
 
         return Inertia::render('Category/Edit', ['category' => $category]);
     }
-
 
     public function update(Request $request, $id)
     {
@@ -82,10 +67,7 @@ class CategoryController extends Controller
         if ($validator->fails()) {
             return Inertia::render('Category/Edit', ['errors' => $validator->errors()->toArray(), 'category' => []]);
         }
-
-
         $inputs = $validator->validated();
-
 
         if ($request->file('image') && $request->file('image')->isValid()) {
             if ($category && file_exists($category->image)) {
@@ -97,7 +79,6 @@ class CategoryController extends Controller
             $image->move(public_path('images/categories'), $name_gen);
             $inputs['image'] = $save_url;
         }
-
         $category->update($inputs);
 
         return to_route('category.index');
