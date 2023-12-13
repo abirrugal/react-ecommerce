@@ -3,14 +3,15 @@
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use Inertia\Inertia;
 
 class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::orderBy('id','DESC')->paginate(15);
+        $orders = Order::orderBy('id','DESC')->with('user')->paginate(15);
 
-        return view('admin.order.index',compact('orders'));
+        return Inertia::render('Order/Index', ['orders'=>$orders]);
     }
 
     public function show(Order $order)
