@@ -2,6 +2,7 @@ import React from 'react'
 import Front from './../../Layouts/Front'
 import Pagination from './../../Includes/Pagination'
 import Search from '../../Includes/Search'
+import { Link } from '@inertiajs/react'
 
 function Index({ orders }) {
 
@@ -38,7 +39,7 @@ function Index({ orders }) {
                                                 <a href="{{ route('order.details',$item->id) }}" class="btn btn-info text-white btn-sm">
                                                     <i data-feather="eye" class="nav-icon icon-xs"></i>
                                                 </a>
-                                                <a href="{{ route('order.invoice',$item->id) }}" target="_blank" class="btn btn-info text-white btn-sm">Invoice</a>
+                                                <Link href={base_url + `/admin/orders/${id}/invoice`} target="_blank" class="btn btn-info text-white btn-sm">Invoice</Link>
                                             </td>
                                             </tr>
                                             )

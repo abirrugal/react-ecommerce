@@ -82,7 +82,7 @@ Route::group(['prefix'=> 'admin'], function(){
 
     // Route::get('orders', [OrderController::class, 'index'])->name('order');
     // Route::get('order/{order}/show', [OrderController::class, 'show'])->name('order.details');
-    // Route::get('orders/{order}/invoice', [OrderController::class, 'invoice'])->name('order.invoice');
+    Route::get('orders/{order}/invoice', [OrderController::class, 'invoice'])->name('order.invoice');
 
     Route::get('users', [UserController::class, 'index'])->name('user');
     Route::get('user/inactive/{id}', [UserController::class, 'inactive'])->name('user.inactive');
