@@ -82,7 +82,11 @@ const Create = ({ categories, brands, variants, product }) => {
   const mulipleImageUpload = (e) => {
     const images = { ...data }
     setData(images);
-    router.post(base_url + `/admin/product/${product.id}/addimage`, { 'images': data.images });
+    router.post(base_url + `/admin/product/${product.id}/addimage`, { 'images': data.images }, { preserveScroll: true });
+  }
+
+  const removeImage = (id) => {
+    router.get(base_url + `/admin/product/images/${id}/delete`, {}, { preserveScroll: true });
   }
 
   const handleCategoryChange = (e) => {
@@ -242,7 +246,7 @@ const Create = ({ categories, brands, variants, product }) => {
                   <img class="card-img-top mr-3" src={base_url + '/' + image} alt="Card image cap" />
                   <div class="card-body text-center">
                     {/* <h5 class="card-title">{image}</h5> */}
-                    <Link href={base_url + `/admin/product/images/${id}/delete`} class="btn btn-outline-danger">Remove</Link>
+                    <button onClick={(e) => removeImage(id)} class="btn btn-outline-danger">Remove</button>
                   </div>
                 </div>
               </div>)
