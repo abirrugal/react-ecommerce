@@ -3,7 +3,6 @@ import SizeInputs from '../../Includes/MultipleInput';
 import Front from '../../Layouts/Front'
 import axios from 'axios';
 import { useForm } from '@inertiajs/react';
-import { Link } from '@inertiajs/react';
 import { router } from '@inertiajs/react';
 
 const Create = ({ categories, brands, variants, product }) => {
@@ -22,22 +21,30 @@ const Create = ({ categories, brands, variants, product }) => {
   });
   const [subcategories, setSubcategories] = useState([]);
 
+  useEffect(() => {
+    if (data.category_id) {
+      axios.get(base_url + `/admin/category/${data.category_id}/subcategories`)
+        .then((res) => {
+          let subcategoryList = res.data.subcategories.map(({ id, name }) => ({ id, name }));
+          setSubcategories(subcategoryList);
+
+          if (product.subcategory_id) {
+            setData('subcategory_id', product.subcategory_id.toString());
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching subcategories:', error);
+        });
+    }
+  }, [data.category_id, product.subcategory_id]);
+
   const handleSizeDataChange = (updatedVariant) => {
     setData('variant', updatedVariant);
   };
 
-  useEffect(() => {
-    // Set the selected subcategory based on product.subcategory_id
-    if (product.subcategory_id) {
-      setData('subcategory_id', product.subcategory_id.toString());
-    }
-  }, [product.subcategory_id]);
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const updatedData = { ...data };
-    setData(updatedData);
-    post(base_url + '/admin/product/' + product.id, data);
+  const handleCategoryChange = (e) => {
+    const categoryId = e.target.value;
+    setData('category_id', categoryId);
   };
 
   const handleImage = (e) => {
@@ -55,7 +62,7 @@ const Create = ({ categories, brands, variants, product }) => {
     }
   }
 
-  const handleMultipleImage = (e) => {
+  const previwGalleryImages = (e) => {
     e.stopPropagation()
     const multipleImages = e.target.files;
     setData('images', multipleImages);
@@ -79,38 +86,22 @@ const Create = ({ categories, brands, variants, product }) => {
     }
   }
 
-  const mulipleImageUpload = (e) => {
+  const uploadGalleryImages = (e) => {
     const images = { ...data }
     setData(images);
     router.post(base_url + `/admin/product/${product.id}/addimage`, { 'images': data.images }, { preserveScroll: true });
   }
 
-  const removeImage = (id) => {
+  const removeGalleryImages = (id) => {
     router.get(base_url + `/admin/product/images/${id}/delete`, {}, { preserveScroll: true });
   }
 
-  const handleCategoryChange = (e) => {
-    const categoryId = e.target.value;
-    setData('category_id', categoryId);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const updatedData = { ...data };
+    setData(updatedData);
+    post(base_url + '/admin/product/' + product.id, data);
   };
-
-  useEffect(() => {
-    if (data.category_id) {
-      axios.get(base_url + `/admin/category/${data.category_id}/subcategories`)
-        .then((res) => {
-          let subcategoryList = res.data.subcategories.map(({ id, name }) => ({ id, name }));
-          setSubcategories(subcategoryList);
-
-          // Set the selected subcategory based on product.subcategory_id
-          if (product.subcategory_id) {
-            setData('subcategory_id', product.subcategory_id.toString());
-          }
-        })
-        .catch((error) => {
-          console.error('Error fetching subcategories:', error);
-        });
-    }
-  }, [data.category_id, product.subcategory_id]);
 
   return (
     <Front title="Update Product">
@@ -223,30 +214,27 @@ const Create = ({ categories, brands, variants, product }) => {
           </form>
         </div>
 
-        <div className='row clearfix bg-white p-5 my-5'>
-          <h4 className='text-center mt-3'>Gallery Images</h4>
-
-          <div class="col-10 mt-3">
-            <label for="image" class="col-form-label">Add More Image :</label>
+        <div className='row bg-white p-5 my-5'>
+          <h4>Gallery Images</h4>
+          <div class="col-12">            
             <div class="input-group">
-              <input type="file" class="form-control" ref={imageRef} onChange={handleMultipleImage} placeholder="Upload" aria-label="Recipient's username" aria-describedby="basic-addon2" multiple />
+              <input type="file" class="form-control form-control-lg" ref={imageRef} onChange={previwGalleryImages} placeholder="Upload" aria-label="Recipient's username" aria-describedby="basic-addon2" multiple />
               <div class="input-group-append">
-                <button class="btn btn-info btn-sm text-white" onClick={mulipleImageUpload} type="button">Add</button>
+                <button class="btn btn-primary" onClick={uploadGalleryImages} type="button">Upload</button>
               </div>
             </div>
             {/* <img src='' id='multiImagePreview' className='mt-3' width='150px' /> */}
             <div class="row" id="preview_img"></div>
           </div>
 
-          <div class="row d-flex flex-wrap">
-            <div className='my-3'>Galary Images :</div>
+          <div class="row">
             {product.images && (product.images.map(({ id, image }) => {
-              return (<div class="col-3">
+              return (<div class="col-md-3 col-xl-2">
                 <div class="card mt-3" style={{ width: '12rem' }}>
                   <img class="card-img-top mr-3" src={base_url + '/' + image} alt="Card image cap" />
-                  <div class="card-body text-center">
+                  <div class="card-body text-center py-1">
                     {/* <h5 class="card-title">{image}</h5> */}
-                    <button onClick={(e) => removeImage(id)} class="btn btn-outline-danger">Remove</button>
+                    <a href="#" onClick={(e) => removeGalleryImages(id)} class="link-danger">Remove</a>
                   </div>
                 </div>
               </div>)
