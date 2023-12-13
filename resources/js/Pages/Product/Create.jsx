@@ -63,7 +63,7 @@ const Create = ({ categories, brands, variants }) => {
           imgElement.src = event.target.result;
           imgElement.alt = 'Preview';
           imgElement.style.maxWidth = '120px';
-          imgElement.style.marginRight = '1px';
+          imgElement.style.marginRight = '0px';
           previewImg.appendChild(imgElement);
         };
         reader.readAsDataURL(image);
@@ -132,7 +132,7 @@ const Create = ({ categories, brands, variants }) => {
               </div>
             </div>
             <div class="row">
-              <div class="col-sm-12 mb-3">
+              <div class="col-sm-12 mb-2">
                 <label for="name" class="col-form-label">Product Name :</label>
                 <div class="form-group">
                   <input type="text" id="name" name="name" onChange={(e) => setData('name', e.target.value)} minlength="3" class="form-control" placeholder="Product Name" />
@@ -140,19 +140,19 @@ const Create = ({ categories, brands, variants }) => {
               </div>
             </div>
             <div class="row">
-              <div class="col-sm-4 mb-3">
+              <div class="col-sm-4 mb-2">
                 <label for="price" class="col-form-label">Product Price :</label>
                 <div class="form-group">
                   <input type="number" id="price" name="price" onChange={(e) => setData('price', e.target.value)} class="form-control" placeholder="Product Price" />
                 </div>
               </div>
-              <div class="col-sm-4 mb-3">
+              <div class="col-sm-4 mb-2">
                 <label for="discount" class="col-form-label">Product Discount (Ex: 5 for 5% discount):</label>
                 <div class="form-group">
                   <input type="number" id="discount" name="discount" onChange={(e) => setData('discount', e.target.value)} class="form-control" placeholder="Product discount Price" />
                 </div>
               </div>
-              <div class="col-sm-4 mb-3">
+              <div class="col-sm-4 mb-2">
                 <label for="stock_in" class="col-form-label">Product Current Stock :</label>
                 <div class="form-group">
                   <input type="number" id="stock_in" name="stock_in" onChange={(e) => setData('stock_in', e.target.value)} class="form-control" placeholder="Product Current Stock" />
@@ -160,7 +160,7 @@ const Create = ({ categories, brands, variants }) => {
               </div>
             </div>
             <div class="row">
-              <div class="col-sm-12 mb-3">
+              <div class="col-sm-12 mb-2">
                 <label for="description" class="col-form-label">Product Description :</label>
                 <div class="form-group">
                   <textarea class="form-control" id="description" name="description" onChange={(e) => setData('description', e.target.value)} placeholder="Product Description here" ></textarea>
@@ -187,7 +187,7 @@ const Create = ({ categories, brands, variants }) => {
                 <label for="image" class="col-form-label">Product Multiple Image :</label>
                 <div class="form-group">
                   <input class="form-control" name="images" type="file" onChange={handleMultipleImage} id="multiImg" multiple />
-                  <div class="row justify-content-center align-items-center flex-wrap p-3" id="preview_img"></div>
+                  <div class="row justify-content-center align-items-center flex-wrap mt-2" id="preview_img"></div>
                 </div>
               </div>
             </div>
