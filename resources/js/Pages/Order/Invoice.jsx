@@ -1,50 +1,46 @@
 import React from 'react';
-import './../../../../public/invoice/css/main-style.css';
+import './../../../../public/css/main.css'
 
 const Invoice = ({ order }) => {
     return (
         <html lang="en">
-            <head>
-                <link rel="icon" type="image/x-icon" sizes="20x20" href="{{ asset('invoice/images/icon/favicon.png') }}" />
-                <link rel="stylesheet" type="text/css" href="{{ asset('invoice/css/main-style.css') }}" />
-            </head>
             <body className="section-bg-one">
-                <main class="container invoice-wrapper" id="download-section">
+                <main className="container invoice-wrapper" id="download-section">
                     {/* <!-- invoice Top --> */}
-                    <div class="row justify-content-between">
-                        <div class="col-sm-3">
-                            <div class="invoice-logo mb-4">
-                                <a href="/"><img src="{{ asset('images/logo/logo.png') }}" class="img-thumbnail" /></a>
+                    <div className="row justify-content-between">
+                        <div className="col-sm-3">
+                            <div className="invoice-logo mb-4">
+                                <a href="/"><img src="{{ asset('images/logo/logo.png') }}" className="img-thumbnail" /></a>
                             </div>
                         </div>
-                        <div class="col-sm-4">
-                            <div class="invoice-details mb-3">
-                                <h4 class="invoice-details-title text-18 mb-15">Information</h4>
-                                <div class="invoice-details-inner">
-                                    <p class="invoice-details-para"> <strong>Address :</strong> Street name, United States.</p>
-                                    <p class="invoice-details-para"><strong>Call :</strong> +1-908-567-0987</p>
-                                    <p class="invoice-details-para"><strong>E-mail :</strong> info@domain.com</p>
+                        <div className="col-sm-4">
+                            <div className="invoice-details mb-3">
+                                <h4 className="invoice-details-title text-18 mb-15">Information</h4>
+                                <div className="invoice-details-inner">
+                                    <p className="invoice-details-para"> <strong>Address :</strong> Street name, United States.</p>
+                                    <p className="invoice-details-para"><strong>Call :</strong> +1-908-567-0987</p>
+                                    <p className="invoice-details-para"><strong>E-mail :</strong> info@domain.com</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-4 text-align-start text-sm-end mb-4">
-                            <div class="invoice-details mb-3">
-                                <h4 class="invoice-details-title text-18 mb-15">Payment </h4>
-                                <div class="invoice-details-inner">
-                                    <p class="invoice-details-para"><strong>Invoice Id : </strong> </p>
-                                    <p class="invoice-details-para"><strong>Payment Status :</strong>  Paid </p>
-                                    <p class="invoice-details-para"><strong>Purchase:</strong>  </p>
-                                    <p class="invoice-details-para"><strong>Address: </strong> </p>
+                        <div className="col-sm-4 text-align-start text-sm-end mb-4">
+                            <div className="invoice-details mb-3">
+                                <h4 className="invoice-details-title text-18 mb-15">Payment </h4>
+                                <div className="invoice-details-inner">
+                                    <p className="invoice-details-para"><strong>Invoice Id : {order.id}  </strong> </p>
+                                    <p className="invoice-details-para"><strong>Payment Status :</strong>  Paid </p>
+                                    <p className="invoice-details-para"><strong>Purchase:</strong> {order.created_at} </p>
+                                    <p className="invoice-details-para"><strong>Address: </strong> {order.detail?.order_address?.address} </p>
                                 </div>
                             </div>
                         </div>
                     </div>
                     {/* <!-- invoice Table --> */}
-                    <div class="table-responsive invoice-table mb-4">
-                        <table class="table table-striped">
+                    <div className="table-responsive invoice-table mb-4">
+                        <table className="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>#</th>
+                                    {/* <th>#</th> */}
                                     <th>Product Name</th>
                                     <th>Unit Cost</th>
                                     <th>Qty</th>
@@ -52,26 +48,27 @@ const Invoice = ({ order }) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {/* @foreach ($order->items as $key => $item) */}
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                {/* @endforeach */}
+                          {order.items && order.items.map((item)=>{
+                            return ( <tr>
+                                <td>{item.product.name}</td>
+                                <td>{order.total_price}</td>
+                                <td>{order.quantity}</td>
+                                <td>{order.total_price * item.quantity}</td>
+                                {/* <td></td> */}
+                            </tr>)
+                          })}
+                              
                             </tbody>
                         </table>
                     </div>
-                    <div class="row">
-                        <div class="col-lg-7 col-sm-4"></div>
-                        <div class="col-lg-5 col-md-6 col-sm-7 ms-auto">
-                            <table class="table">
+                    <div className="row">
+                        <div className="col-lg-7 col-sm-4"></div>
+                        <div className="col-lg-5 col-md-6 col-sm-7 ms-auto">
+                            <table className="table">
                                 <tbody>
                                     <tr>
                                         <td>
-                                            <strong class="status">Subtotal</strong>
+                                            <strong className="status">Subtotal</strong>
                                         </td>
                                         <td>
                                             {/* ${{ $order->total_price * $item->quantity}} */}
@@ -88,7 +85,7 @@ const Invoice = ({ order }) => {
                             @endphp */}
                                         <tr>
                                             <td>
-                                                <strong class="status">Discount (%)</strong>
+                                                <strong className="status">Discount (%)</strong>
                                             </td>
                                             {/* @if ($order->discount == NULL) */}
                                             {/* <td>- $0</td> */}
@@ -99,7 +96,7 @@ const Invoice = ({ order }) => {
                                     </tr>
                                     <tr>
                                         <td>
-                                            <strong class="status">VAT (10%)</strong>
+                                            <strong className="status">VAT (10%)</strong>
                                         </td>
                                         <td>
                                             {/* + ${{ round($totalPrice -  $originalPrice) }} */}
@@ -108,17 +105,17 @@ const Invoice = ({ order }) => {
 
                                     <tr>
                                         <td>
-                                            <strong class="status">Shipping Charge</strong>
+                                            <strong className="status">Shipping Charge</strong>
                                         </td>
                                         <td>+ $50</td>
                                     </tr>
 
                                     <tr>
-                                        <td class="border-bottom-0">
+                                        <td className="border-bottom-0">
                                             <strong>Total</strong>
                                         </td>
 
-                                        <td class="border-bottom-0">
+                                        <td className="border-bottom-0">
                                             {/* @if ($order->discount == NULL)
                                     <strong>${{ round($total) }}</strong>
                                 @else
@@ -133,19 +130,13 @@ const Invoice = ({ order }) => {
                 </main>
 
                 {/* <!-- invoice Bottom  --> */}
-                <div class="text-center mt-5 mb-4 regular-button">
-                    <div class="d-print-none d-flex justify-content-center flex-wrap gap-10">
-                        <button id="bill-download" class="btn-primary-outline">Download</button>
-                        <a href="javascript:window.print()" class="btn-primary-fill">Print Invoice</a>
+                <div className="text-center mt-5 mb-4 regular-button">
+                    <div className="d-print-none d-flex justify-content-center flex-wrap gap-10">
+                        <button id="bill-download" className="btn-primary-outline">Download</button>
+                        <a href="javascript:window.print()" className="btn-primary-fill">Print Invoice</a>
                     </div>
                 </div>
 
-                {/* <!-- jquery--> */}
-                <script src="{{ asset('invoice') }}/js/jquery-3.7.0.min.js"></script>
-                {/* <!-- Plugin --> */}
-                <script src="{{ asset('invoice') }}/js/plugin.js"></script>
-                {/* <!-- Main js--> */}
-                <script src="{{ asset('invoice') }}/js/mian.js"></script>
 
             </body>
         </html>
