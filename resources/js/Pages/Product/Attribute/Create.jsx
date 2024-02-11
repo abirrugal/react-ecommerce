@@ -1,19 +1,22 @@
-import React from 'react'
-import Front from './../../../Layouts/Front'
-import { useForm } from '@inertiajs/react'
+import React from 'react';
+import Front from './../../../Layouts/Front';
+import { useForm } from '@inertiajs/react';
 
 function Create() {
-
-  const { data, setData, errors, post } = useForm({
+  const { data, setData, post, errors } = useForm({
     name: '',
-    status: true
+    status: true,
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const updateData = { ...data };
-    post(base_url + '/admin/attribute/', updateData);
-  }
+    post(base_url + '/admin/attribute', updateData);
+  };
+
+  const handleStatusChange = (e) => {
+    setData('status', e.target.checked);
+  };
 
   return (
     <Front title="Add Variant">
@@ -25,25 +28,42 @@ function Create() {
         <div className="card-body">
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label htmlFor="name" className="col-form-label">Name :</label>
+              <label htmlFor="name" className="col-form-label">
+                Name :
+              </label>
               <div className="form-group">
-                <input type="text" id="name" name="name" onChange={e => setData('name', e.target.value)} className="form-control" placeholder="Name" />
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  onChange={(e) => setData('name', e.target.value)}
+                  className="form-control"
+                  placeholder="Name"
+                />
               </div>
-              {errors.name && <div className='alert alert-danger'>{errors.name}</div>}
+              {errors.name && <div className="alert alert-danger">{errors.name}</div>}
             </div>
 
             <div className="form-check form-switch my-3">
-              <input className="form-check-input" name='status' onChange={e => setData('status', e.target.checked)} type="checkbox" id="status" checked={data.status} />
-              <label className="form-check-label" htmlForfor="status">Status</label>
+              <input
+                className="form-check-input"
+                name="status"
+                onChange={handleStatusChange}
+                type="checkbox"
+                id="status"
+                checked={data.status}
+              />
+              <label className="form-check-label" htmlFor="status">
+                Status
+              </label>
             </div>
 
             <input type="submit" className="btn btn-primary px-4 submit" value="Create Brand" />
           </form>
         </div>
       </div>
-
     </Front>
-  )
+  );
 }
 
-export default Create
+export default Create;

@@ -43,7 +43,7 @@ class ProductController extends Controller
             'subcategory_id' => 'required|numeric|exists:sub_categories,id',
             'brand_id' => 'nullable|numeric|exists:brands,id',
             'description' => 'required|min:2|string',
-            'variant' => 'required',
+            'variant' => 'nullable',
             'price' => 'required|numeric',
             'stock_in' => 'required|numeric',
             'discount' => 'required|numeric',
@@ -63,15 +63,15 @@ class ProductController extends Controller
         $inputs['slug'] = strtolower(str_replace(' ', '-', $request->name));
         $product = Product::create($inputs);
         $variants = $request->variant;
-
-        foreach ($variants as $key => $value) {
-            $product->variants()->create([
-                'name' => $value['attributeName'],
-                'value' => $value['attributeValue'],
-                'additional_price' => $value['additionalPrice']
-            ]);
+        if (!empty($variants)) {
+            foreach ($variants as $key => $value) {
+                $product->variants()->create([
+                    'name' => $value['attributeName'],
+                    'value' => $value['attributeValue'],
+                    'additional_price' => $value['additionalPrice']
+                ]);
+            }
         }
-
         foreach ($request->images as $key => $image) {
             $name_gen = uniqid() . '.' . $image->getClientOriginalExtension();
             $save_url = 'images/products/gallery/' . $name_gen;

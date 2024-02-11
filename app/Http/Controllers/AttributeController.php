@@ -36,19 +36,19 @@ class AttributeController extends Controller
      */
     public function store(Request $request)
     {
-       $validation = Validator::make($request->all(), [
-         'name' => 'required|min:2',
-         'status' => 'required'
-       ]);
-
-       if($validation->fails()){
-        return Inertia::render('Product/Attribute/Create', ['errors'=>$validation->errors()->toArray()]);
-       }
-
-       $inputs = $request->all();
-       Variant::create($inputs);
-
-       return to_route('attribute.index');
+        $validation = Validator::make($request->all(), [
+            'name' => 'required|min:2',
+            'status' => 'required'
+        ]);
+    
+        if ($validation->fails()) {
+            return Inertia::render('Product/Attribute/Create', ['errors' => $validation->errors()->toArray()]);
+        }
+    
+        $inputs = $request->all();
+        Variant::create($inputs);
+    
+        return redirect()->route('attribute.index');
     }
 
     /**
